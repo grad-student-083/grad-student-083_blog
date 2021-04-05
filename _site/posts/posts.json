@@ -1,0 +1,53 @@
+[
+  {
+    "path": "posts/2021-04-05-optimal-control-01-lqr/",
+    "title": "Optimal Control 01: LQR",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Md Ferdous Alam",
+        "url": "https://ferdous-alam.github.io"
+      }
+    ],
+    "date": "2021-04-05",
+    "categories": [],
+    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-04-05T02:14:10-04:00",
+    "input_file": "optimal-control-01-lqr.utf8.md"
+  },
+  {
+    "path": "posts/2021-03-29-deep-rl-01-dqn/",
+    "title": "Deep RL 01: DQN",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Nora Jones",
+        "url": "https://example.com/norajones"
+      }
+    ],
+    "date": "2021-03-29",
+    "categories": [],
+    "contents": "\nThe graduate student perspective on DQN.\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-03-29T18:50:57-04:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/welcome/",
+    "title": "Welcome to The Graduate Student Perspective",
+    "description": "Welcome to our new blog, The Graduate Student Perspective. We hope you enjoy \nreading what we have to say!",
+    "author": [
+      {
+        "name": "Nora Jones",
+        "url": "https://example.com/norajones"
+      }
+    ],
+    "date": "2021-03-29",
+    "categories": [],
+    "contents": "\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-03-29T18:40:41-04:00",
+    "input_file": {}
+  }
+]
