@@ -5,6 +5,8 @@ description: |
 author:
   - name: Md Ferdous Alam
     url: https://ferdous-alam.github.io
+    affiliation: PhD student, MAE, The Ohio State University
+    affiliation_url: https://mae.osu.edu
 date: 03-29-2021
 output:
   distill::distill_article:

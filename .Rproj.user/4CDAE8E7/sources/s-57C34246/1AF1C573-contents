@@ -1,7 +1,8 @@
 ---
-title: "Deep RL 01: DQN"
+title: "Welcome to The Graduate Student Perspective"
 description: |
-  A short description of the post.
+  Welcome to our new blog, The Graduate Student Perspective. We hope you enjoy 
+  reading what we have to say!
 author:
   - name: Md Ferdous Alam
     url: https://ferdous-alam.github.io
@@ -13,15 +14,13 @@ output:
     self_contained: false
 ---
 
-
-The graduate student perspective on DQN.
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
-
-Learn more about using Distill at <https://rstudio.github.io/distill>.
 
 
