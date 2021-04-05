@@ -2,7 +2,7 @@
   {
     "path": "posts/2021-04-05-optimal-control-01-lqr/",
     "title": "Optimal Control 01: LQR",
-    "description": "A short description of the post.",
+    "description": "This post is part of a series of posts on optimal control theory. We take a detalied look on how classical LQR control is derived. A simple implementation is provided for clarity.",
     "author": [
       {
         "name": "Md Ferdous Alam",
@@ -11,9 +11,9 @@
     ],
     "date": "2021-04-05",
     "categories": [],
-    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "contents": "\n\nContents\nIntroduction\nLinear system\n\nIntroduction\nLQR is an extremely popular optomal control framework. This blog closely follows (Duriez, Brunton, and Noack 2017).\nLinear system\nLet’s consider the linear system\n\\[\\begin{align} \n\\dot{\\mathbf{x}} &= \\mathbf{A}\\mathbf{x} + \\mathbf{B}\\mathbf{u}\\\\\n\\mathbf{y} &= \\mathbf{C}\\mathbf{x} + \\mathbf{D}\\mathbf{u}\\tag{1}\n\\end{align}\\]\nIf the system in (1) is controllable then a proportional controller can be designed as\n\\[\\begin{equation}\n\\mathbf{u} = -\\mathbf{K}_r \\mathbf{x}\\tag{2}\n\\end{equation}\\]\nHence the closed loop system becomes\n\\[\\begin{equation}\n\\dot{\\mathbf{x}} = (\\mathbf{A}-\\mathbf{B}\\mathbf{K}_r)\\mathbf{x}\\tag{3}\n\\end{equation}\\]\nWe can construct a quadratic cost \\(J\\) that balances the regulation of \\(\\mathbf{x}\\) with the cost of control input \\(\\mathbf{u}\\),\n\\[\\begin{equation}\nJ(t) = \\int_0^t [\\mathbf{x}^T(\\tau)\\mathbf{Q}\\mathbf{x}(\\tau)] + \\mathbf{u}^T(\\tau)\\mathbf{R}\\mathbf{u}(\\tau)]\\tag{4}\n\\end{equation}\\]\nBy solving Algebraic Riccati Equation (ARE) we get the optimal control law,\n\\[\\begin{equation}\n\\mathbf{K}_r = \\mathbf{R}^{-1}\\mathbf{B}^T\\mathbf{P}\\tag{5}\n\\end{equation}\\]\nwhere the ARE is expressed as\n\\[\\begin{equation}\n\\mathbf{A}^T\\mathbf{P} + \\mathbf{P}\\mathbf{A} - \\mathbf{P}\\mathbf{B}\\mathbf{R}^{-1}\\mathbf{B}^T\\mathbf{P} + \\mathbf{Q} = 0\\tag{6}\n\\end{equation}\\]\n\n\n\nDuriez, Thomas, Steven L Brunton, and Bernd R Noack. 2017. Machine Learning Control-Taming Nonlinear Dynamics and Turbulence. Springer.\n\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-04-05T02:47:25-04:00",
+    "last_modified": "2021-04-05T04:44:24-04:00",
     "input_file": "optimal-control-01-lqr.utf8.md"
   },
   {

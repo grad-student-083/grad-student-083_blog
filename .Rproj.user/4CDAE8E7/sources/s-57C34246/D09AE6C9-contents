@@ -1,25 +1,62 @@
 ---
 title: "Optimal Control 01: LQR"
 description: |
-  A short description of the post.
+  This post is part of a series of posts on optimal control theory. We take a detalied look on how classical LQR control is derived. A simple implementation is provided for clarity.  
+output:  
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+date: 04-05-2021
 author:
   - name: Md Ferdous Alam
     url: https://ferdous-alam.github.io
     affiliation: PhD student, MAE, The Ohio State University
     affiliation_url: https://mae.osu.edu
-date: 04-05-2021
-output:
-  distill::distill_article:
-    self_contained: false
+
+bibliography: biblio.bib
 ---
+## Introduction 
+LQR is an extremely popular optomal control framework. This blog closely follows [@duriez2017machine]. 
+
+## Linear system 
+Let's consider the linear system 
+
+\begin{align} 
+\dot{\mathbf{x}} &= \mathbf{A}\mathbf{x} + \mathbf{B}\mathbf{u}\\
+\mathbf{y} &= \mathbf{C}\mathbf{x} + \mathbf{D}\mathbf{u}(\#eq:linear)
+\end{align} 
+
+If the system in \@ref(eq:linear) is controllable then a proportional controller can be designed as 
+
+\begin{equation}
+\mathbf{u} = -\mathbf{K}_r \mathbf{x}(\#eq:controller)
+\end{equation}
+
+Hence the closed loop system becomes 
+
+\begin{equation}
+\dot{\mathbf{x}} = (\mathbf{A}-\mathbf{B}\mathbf{K}_r)\mathbf{x}(\#eq:closedloop)
+\end{equation}
+
+We can construct a quadratic cost $J$ that balances the regulation of $\mathbf{x}$ with the cost of control input $\mathbf{u}$,
+
+\begin{equation}
+J(t) = \int_0^t [\mathbf{x}^T(\tau)\mathbf{Q}\mathbf{x}(\tau)] + \mathbf{u}^T(\tau)\mathbf{R}\mathbf{u}(\tau)](\#eq:quadraticcost)
+\end{equation}
+
+By solving Algebraic Riccati Equation (ARE) we get the optimal control law, 
+
+\begin{equation}
+\mathbf{K}_r = \mathbf{R}^{-1}\mathbf{B}^T\mathbf{P}(\#eq:optimalcontrol)
+\end{equation}
+
+where the ARE is expressed as
+
+\begin{equation}
+\mathbf{A}^T\mathbf{P} + \mathbf{P}\mathbf{A} - \mathbf{P}\mathbf{B}\mathbf{R}^{-1}\mathbf{B}^T\mathbf{P} + \mathbf{Q} = 0(\#eq:ARE)
+\end{equation}
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
-Distill is a publication format for scientific and technical writing, native to the web.
-
-Learn more about using Distill at <https://rstudio.github.io/distill>.
 
 

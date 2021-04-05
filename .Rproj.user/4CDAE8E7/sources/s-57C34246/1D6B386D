@@ -1,24 +1,24 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1617604915103.000,
+    "created" : 1617608028165.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3778574007",
-    "id" : "EDB8FCCA",
+    "hash" : "0",
+    "id" : "1D6B386D",
     "lastKnownWriteTime" : 1617605267,
-    "last_content_update" : 1617605267679,
+    "last_content_update" : 1617605267,
     "path" : "~/Research/personal_website/grad-student-083_blog/blog/_posts/2021-03-29-deep-rl-01-dqn/deep-rl-01-dqn.Rmd",
     "project_path" : "_posts/2021-03-29-deep-rl-01-dqn/deep-rl-01-dqn.Rmd",
     "properties" : {
-        "cursorPosition" : "7,0",
+        "cursorPosition" : "12,0",
         "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 2,
+    "relative_order" : 3,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_markdown"
