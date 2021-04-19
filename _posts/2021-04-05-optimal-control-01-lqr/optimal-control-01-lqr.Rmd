@@ -18,6 +18,9 @@ bibliography: biblio.bib
 ## Introduction 
 LQR is an extremely popular optomal control framework. This blog closely follows [@duriez2017machine]. 
 
+## Notation
+Small 
+
 ## Linear system 
 Let's consider the linear system 
 
