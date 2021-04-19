@@ -1,0 +1,37 @@
+---
+title: "RL 01: Policy gradient methods"
+description: |
+  Here we take a detailed view of policy gradient methods and their intuitions. This blog discuess how REINFORCE, baseline and actor-critic algorithms came into existence.
+output:  
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+date: 04-19-2021
+author:
+  - name: Md Ferdous Alam
+    url: https://ferdous-alam.github.io
+    affiliation: PhD student, MAE, The Ohio State University
+    affiliation_url: https://mae.osu.edu
+
+bibliography: biblio.bib
+---
+## Introduction 
+We closely follow chapter 13 of the classic textbook of **Sutton and Barto** (2nd edition) [@sutton2018reinforcement]. Initially we visit the classic policy gradient theorem and later build on top of that to develop REINFORCE and actor-critic algorithms. As usual our goal is to develop better intuition on how and why these algorithms work. 
+
+## Policy based RL vs value based RL
+
+## Policy gradient theorem 
+
+## REINFORCE algorithm 
+
+## Using baseline
+
+## Actor-critic algorithms 
+
+## Case study
+
+## Summary 
+
+
+
+

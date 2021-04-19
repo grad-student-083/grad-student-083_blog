@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-04-19-rl-01-policy-gradient-methods/",
+    "title": "RL 01: Policy gradient methods",
+    "description": "Here we take a detailed view of policy gradient methods and their intuitions. This blog discuess how REINFORCE, baseline and actor-critic algorithms came into existence.",
+    "author": [
+      {
+        "name": "Md Ferdous Alam",
+        "url": "https://ferdous-alam.github.io"
+      }
+    ],
+    "date": "2021-04-19",
+    "categories": [],
+    "contents": "\n\nContents\nIntroduction\nPolicy based RL vs value based RL\nPolicy gradient theorem\nREINFORCE algorithm\nUsing baseline\nActor-critic algorithms\nCase study\nSummary\n\nIntroduction\nWe closely follow chapter 13 of the classic textbook of Sutton and Barto (2nd edition) (Sutton and Barto 2018). Initially we visit the classic policy gradient theorem and later build on top of that to develop REINFORCE and actor-critic algorithms. As usual our goal is to develop better intuition on how and why these algorithms work.\nPolicy based RL vs value based RL\nPolicy gradient theorem\nREINFORCE algorithm\nUsing baseline\nActor-critic algorithms\nCase study\nSummary\n\n\n\nSutton, Richard S, and Andrew G Barto. 2018. Reinforcement Learning: An Introduction. MIT press.\n\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-04-19T04:09:26-04:00",
+    "input_file": "rl-01-policy-gradient-methods.utf8.md"
+  },
+  {
     "path": "posts/2021-04-05-optimal-control-01-lqr/",
     "title": "Optimal Control 01: LQR",
     "description": "This post is part of a series of posts on optimal control theory. We take a detalied look on how classical LQR control is derived. A simple implementation is provided for clarity.",
