@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-09-25-RL-primer/",
+    "title": "RL primer: Intuitive formalism",
+    "description": "A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.",
+    "author": [
+      {
+        "name": "Md Ferdous Alam",
+        "url": "https://ferdous-alam.github.io"
+      }
+    ],
+    "date": "2021-09-25",
+    "categories": [],
+    "contents": "\n\nContents\nIntroduction\nOnline sequential decision making\nBandit: A mandatory prior to RL\nMarkov Decision Process: The RL formalism\nDynamic programming\nReinforcement learning and optimal control\nBuilding algorithms for RL\nValue based RL\nPolicy gradient methods\nActor critic methods\nSample complexity of RL algorithms\nConclusion\n\nIntroduction\nOnline sequential decision making\nBandit: A mandatory prior to RL\nMarkov Decision Process: The RL formalism\nDynamic programming\nReinforcement learning and optimal control\nBuilding algorithms for RL\nValue based RL\nPolicy gradient methods\nActor critic methods\nSample complexity of RL algorithms\nConclusion\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-25T04:33:28-04:00",
+    "input_file": "RL-primer.utf8.md"
+  },
+  {
     "path": "posts/2021-04-19-rl-01-policy-gradient-methods/",
     "title": "RL 01: Policy gradient methods",
     "description": "Here we take a detailed view of policy gradient methods and their intuitions. This blog discuess how REINFORCE, baseline and actor-critic algorithms came into existence.",
@@ -13,7 +30,7 @@
     "categories": [],
     "contents": "\n\nContents\nIntroduction\nPolicy based RL vs value based RL\nPolicy gradient theorem\nREINFORCE algorithm\nUsing baseline\nActor-critic algorithms\nCase study\nSummary\n\nIntroduction\nWe closely follow chapter 13 of the classic textbook of Sutton and Barto (2nd edition) (Sutton and Barto 2018). Initially we visit the classic policy gradient theorem and later build on top of that to develop REINFORCE and actor-critic algorithms. As usual our goal is to develop better intuition on how and why these algorithms work.\nPolicy based RL vs value based RL\nPolicy gradient theorem\nREINFORCE algorithm\nUsing baseline\nActor-critic algorithms\nCase study\nSummary\n\n\n\nSutton, Richard S, and Andrew G Barto. 2018. Reinforcement Learning: An Introduction. MIT press.\n\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-04-19T04:09:26-04:00",
+    "last_modified": "2021-09-25T03:44:28-04:00",
     "input_file": "rl-01-policy-gradient-methods.utf8.md"
   },
   {
@@ -62,9 +79,9 @@
     ],
     "date": "2021-03-29",
     "categories": [],
-    "contents": "\n\n\n\n",
+    "contents": "\nWhy graduate student perspective?\nReinforcement learning and control theory are vast! The stream of research articles are often overwhelming. Sometimes I like to take a step back and surprisingly I find peace exploring fundamental topics and explaining them. I remeber there was a time when I wanted a blog that explains complex topics in intuitive ways. Now-a-days the chaotic stream of online blogs have made it extremely difficult for me to find a reliable blog post quickly. I personally enjoy a nice balance between formal presentation of concepts (because they are robust!) followed by an interesting toy example for building intuitions. I like to call this approach Intuitive formalism or often during my PhD research presentations I use the term visual formalism. Unfortunately I can not find a lot of online blog posts/writing according to my taste. So I decided to make a blog for myself that gave birth to this site. In case if you are reading this I appreciate your time here. Cheers! :)\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-04-05T02:46:28-04:00",
+    "last_modified": "2021-09-25T04:11:15-04:00",
     "input_file": "welcome.utf8.md"
   }
 ]

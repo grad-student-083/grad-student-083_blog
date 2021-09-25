@@ -1,0 +1,44 @@
+---
+title: "RL primer: Intuitive formalism"
+description: |
+  A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.
+output:  
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+date: 09-25-2021
+author:
+  - name: Md Ferdous Alam
+    url: https://ferdous-alam.github.io
+    affiliation: PhD student, MAE, The Ohio State University
+    affiliation_url: https://mae.osu.edu
+
+bibliography: biblio.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+## Introduction
+
+## Online sequential decision making
+
+## Bandit: A mandatory prior to RL
+
+## Markov Decision Process: The RL formalism
+
+## Dynamic programming
+
+## Reinforcement learning and optimal control
+
+## Building algorithms for RL
+
+## Value based RL
+
+## Policy gradient methods
+
+## Actor critic methods
+
+## Sample complexity of RL algorithms 
+
+## Conclusion 
