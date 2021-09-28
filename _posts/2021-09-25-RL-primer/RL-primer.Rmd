@@ -1,5 +1,5 @@
 ---
-title: "RL primer: Intuitive formalism"
+title: "Reinforcement learning primer"
 description: |
   A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.
 output:  
@@ -20,10 +20,18 @@ bibliography: biblio.bib
 knitr::opts_chunk$set(echo = FALSE)
 ```
 ## Introduction
+Here I will try to explain how RL stems from the sequential decision making framework and its close relation with optimal control theory. I will follow two primary references, reinforcement learning and optimal control [@bertsekas2019reinforcement] and introduction to reinforcement learning [@sutton2018reinforcement]
 
 ## Online sequential decision making
+The goal is to take sequential decisions "online" to achieve a certain goal; often times it is maximizing a performance objective which can be thougt of as a function $J(\cdot)$. The input to this objective function is not important right now. Let's call this decision maker "agent". The catch is that the agent has to figure out which decision to take based on the observed feedback from the envrionment of its interest. To observe a feedback the agent has to interact with the envrionment through some sort of actions. So, optimization will be at the core of this decision making procedure while we use data collected in an online fashion to identify actions to take. This is why the "learning" happens. 
 
 ## Bandit: A mandatory prior to RL
+Consider an online sequential decision making problem where an agent has $k$ choices to choose an action and everytime it executes an action it receives a feedback from the environment. A fundamental question then aries for the agent: how to choose an action? The way it chooses an action describes its way of behaving in this particular environment which is known as the "policy" denoted as $\pi$. Note that $\pi$ decribes how to take an action but it does not say how to take the best action that will maximize the performance objective $J(\cdot)$. To identify the optimal action we need to find out the optimal policy $\pi^*$. So, the following makes sense 
+\begin{equation}
+\pi^* = \text{argmax}_\pi J^\pi(\cdot)
+\end{equation}
+where $J^\pi(\cdot)$ is the value of the performance objective obtained using policy $\pi$. Note that the agent does not know the underlying distribution of the feedback from each action it takes. If it were known then the agent could easily pick the best action. This setting is known as the *bandit* problem or sometimes as "multi-armed bandit (MAB)" problem. Sometimes people call this "k-armed bandit" as well. Usually the feedback obtained from the environment is known as **reward** or **cost**. 
+
 
 ## Markov Decision Process: The RL formalism
 

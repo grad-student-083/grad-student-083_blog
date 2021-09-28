@@ -84,7 +84,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>RL primer: Intuitive formalism</title>
+  <title>Reinforcement learning primer</title>
   
   <meta property="description" itemprop="description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions." />
   
@@ -95,22 +95,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <meta name="article:author" content="Md Ferdous Alam" />
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="RL primer: Intuitive formalism" />
+  <meta property="og:title" content="Reinforcement learning primer" />
   <meta property="og:type" content="article" />
   <meta property="og:description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions." />
   <meta property="og:locale" content="en_US" />
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary" />
-  <meta property="twitter:title" content="RL primer: Intuitive formalism" />
+  <meta property="twitter:title" content="Reinforcement learning primer" />
   <meta property="twitter:description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions." />
   
   <!--/radix_placeholder_meta_tags-->
   
+  <meta name="citation_reference" content="citation_title=Reinforcement learning: An introduction;citation_publication_date=2018;citation_publisher=MIT press;citation_author=Richard S Sutton;citation_author=Andrew G Barto" />
+  <meta name="citation_reference" content="citation_title=Reinforcement and optimal control;citation_publication_date=2019;citation_publisher=Athena Scientific;citation_author=Dimitri Bertsekas" />
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date","author","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["RL primer: Intuitive formalism"]},{"type":"character","attributes":{},"value":["A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"character","attributes":{},"value":["09-25-2021"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Md Ferdous Alam"]},{"type":"character","attributes":{},"value":["https://ferdous-alam.github.io"]},{"type":"character","attributes":{},"value":["PhD student, MAE, The Ohio State University"]},{"type":"character","attributes":{},"value":["https://mae.osu.edu"]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date","author","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["Reinforcement learning primer"]},{"type":"character","attributes":{},"value":["A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"character","attributes":{},"value":["09-25-2021"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Md Ferdous Alam"]},{"type":"character","attributes":{},"value":["https://ferdous-alam.github.io"]},{"type":"character","attributes":{},"value":["PhD student, MAE, The Ohio State University"]},{"type":"character","attributes":{},"value":["https://mae.osu.edu"]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2459,7 +2461,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"RL primer: Intuitive formalism","description":"A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.","authors":[{"author":"Md Ferdous Alam","authorURL":"https://ferdous-alam.github.io","affiliation":"PhD student, MAE, The Ohio State University","affiliationURL":"https://mae.osu.edu","orcidID":""}],"publishedDate":"2021-09-25T00:00:00.000-04:00","citationText":"Alam, 2021"}
+{"title":"Reinforcement learning primer","description":"A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.","authors":[{"author":"Md Ferdous Alam","authorURL":"https://ferdous-alam.github.io","affiliation":"PhD student, MAE, The Ohio State University","affiliationURL":"https://mae.osu.edu","orcidID":""}],"publishedDate":"2021-09-25T00:00:00.000-04:00","citationText":"Alam, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2469,7 +2471,7 @@ distill-header .nav a {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>RL primer: Intuitive formalism</h1>
+<h1>Reinforcement learning primer</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 <p>A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.</p>
@@ -2502,8 +2504,13 @@ distill-header .nav a {
 </nav>
 </div>
 <h2 id="introduction">Introduction</h2>
+<p>Here I will try to explain how RL stems from the sequential decision making framework and its close relation with optimal control theory. I will follow two primary references, reinforcement learning and optimal control <span class="citation" data-cites="bertsekas2019reinforcement">(Bertsekas <a href="#ref-bertsekas2019reinforcement">2019</a>)</span> and introduction to reinforcement learning <span class="citation" data-cites="sutton2018reinforcement">(Sutton and Barto <a href="#ref-sutton2018reinforcement">2018</a>)</span></p>
 <h2 id="online-sequential-decision-making">Online sequential decision making</h2>
+<p>The goal is to take sequential decisions “online” to achieve a certain goal; often times it is maximizing a performance objective which can be thougt of as a function <span class="math inline">\(J(\cdot)\)</span>. The input to this objective function is not important right now. Let’s call this decision maker “agent”. The catch is that the agent has to figure out which decision to take based on the observed feedback from the envrionment of its interest. To observe a feedback the agent has to interact with the envrionment through some sort of actions. So, optimization will be at the core of this decision making procedure while we use data collected in an online fashion to identify actions to take. This is why the “learning” happens.</p>
 <h2 id="bandit-a-mandatory-prior-to-rl">Bandit: A mandatory prior to RL</h2>
+<p>Consider an online sequential decision making problem where an agent has <span class="math inline">\(k\)</span> choices to choose an action and everytime it executes an action it receives a feedback from the environment. A fundamental question then aries for the agent: how to choose an action? The way it chooses an action describes its way of behaving in this particular environment which is known as the “policy” denoted as <span class="math inline">\(\pi\)</span>. Note that <span class="math inline">\(\pi\)</span> decribes how to take an action but it does not say how to take the best action that will maximize the performance objective <span class="math inline">\(J(\cdot)\)</span>. To identify the optimal action we need to find out the optimal policy <span class="math inline">\(\pi^*\)</span>. So, the following makes sense <span class="math display">\[\begin{equation}
+\pi^* = \text{argmax}_\pi J^\pi(\cdot)
+\end{equation}\]</span> where <span class="math inline">\(J^\pi(\cdot)\)</span> is the value of the performance objective obtained using policy <span class="math inline">\(\pi\)</span>. Note that the agent does not know the underlying distribution of the feedback from each action it takes. If it were known then the agent could easily pick the best action. This setting is known as the <em>bandit</em> problem or sometimes as “multi-armed bandit (MAB)” problem. Sometimes people call this “k-armed bandit” as well.</p>
 <h2 id="markov-decision-process-the-rl-formalism">Markov Decision Process: The RL formalism</h2>
 <h2 id="dynamic-programming">Dynamic programming</h2>
 <h2 id="reinforcement-learning-and-optimal-control">Reinforcement learning and optimal control</h2>
@@ -2514,6 +2521,14 @@ distill-header .nav a {
 <h2 id="sample-complexity-of-rl-algorithms">Sample complexity of RL algorithms</h2>
 <h2 id="conclusion">Conclusion</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references">
+<div id="ref-bertsekas2019reinforcement">
+<p>Bertsekas, Dimitri. 2019. <em>Reinforcement and Optimal Control</em>. Athena Scientific.</p>
+</div>
+<div id="ref-sutton2018reinforcement">
+<p>Sutton, Richard S, and Andrew G Barto. 2018. <em>Reinforcement Learning: An Introduction</em>. MIT press.</p>
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2521,6 +2536,15 @@ distill-header .nav a {
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
