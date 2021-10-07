@@ -1,5 +1,10 @@
 ---
 title: "Reinforcement learning primer"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{!htb}
+  - \usepackage{algorithm}
+  - \usepackage{algpseudocode}
 description: |
   A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.
 output:  
@@ -14,11 +19,13 @@ author:
     affiliation_url: https://mae.osu.edu
 
 bibliography: biblio.bib
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
 ## Introduction
 Here I will try to explain how RL stems from the sequential decision making framework and its close relation with optimal control theory. I will follow two primary references, reinforcement learning and optimal control [@bertsekas2019reinforcement] and introduction to reinforcement learning [@sutton2018reinforcement]
 
@@ -34,8 +41,43 @@ where $J^\pi(\cdot)$ is the value of the performance objective obtained using po
 
 
 ## Markov Decision Process: The RL formalism
+Until now it is clear that we are interested in sequential decision making. To formalize such process we will adopt the **`Markov Decision Process (MDP)'**. An MDP $\mathcal{M}$ is usually expressed as a tuple of these following 5-elements. 
+$$\mathcal{M} = \langle \mathcal{X}, \mathcal{A}, \mathcal{R}, \mathcal{P}, \gamma\rangle$$
+where, 
+
+  * $\mathcal{X}$ is the state-space, a set of states, $\mathbf{x}\in\mathcal{X}$
+  * $\mathcal{A}$ is the action-space, a set of actions, $a\in\mathcal{X}$
+  * $\mathcal{R}$ is the reward function, usually defined in the product space, $\mathcal{R}:\mathcal{X}\times\mathcal{A}\rightarrow \mathbb{R}$
+  * $\mathcal{P}$ is the transition probability function, also known as the dynamics of the system, that describes the conditional probability $p(\mathbf{x}_{t+1}|\mathbf{x}_t, a_t)$ 
+  * $\gamma$ is a discount factor, $\gamma \in [0, 1]$
+  
+
+Let's focus on how this formalism helps in sequential decision making. Assume that the agent is in a current state $\mathbf{x}_t$ at timestep $t$. Based on some policy $\pi$ it takes a decision to move to state $\mathbf{x}_{t+1}$ by taking action $a_t$. To move to that state, the agent needs to know the probability of moving to that state given the current state $\mathbf{x}_t$ and action $a_t$. This is how the conditional probability comes into the process. Once the agent reaches state $\mathbf{x}_{t+1}$ it gets a feedback from the environment. This feedback is called a reward value, $R_t$, which is usually a scalar numeric value. We assume that the reward value $R_t$ comes as the output from the reward function $\mathcal{R}$ while it takes $\mathbf{x}_t$ and $a_t$ as input, meaning $\mathcal{R}(\mathbf{x}_t, a_t): \mathcal{X} \times \mathcal{A} \rightarrow R_t$. What if the reward function only depends on the current state and not the action? Then the reward function would be represented as $\mathcal{R}(\mathbf{x}_t): \mathcal{X} \rightarrow R_t$. Similary if the reward depends on not only the current state and current action but also the state it ends up in, then we would use the description of the reward function as $\mathcal{R}(\mathbf{x}_t, a_t, \mathbf{x}_{t+1}): \mathcal{X} \times \mathcal{A} \times \mathcal{X} \rightarrow R_t$. Finally the agent uses a discount factor $\gamma$ to put less weight onto future rewards and more weight into recent rewards. This makes sense because the agent does not want to depend strongly on the information that comes after many timesteps into the future. All these information can be combined very convenienty in an MDP. Now it should be easier to follow why MDP is attractive for sequential decision making. 
+
+This formalism is great, but what is the goal of the agent in an MDP? In simplified terms the 'goal' of the agent is to maximize the accumulation of rewards. Let's define the accumulation of rewards as **return**. The return obtained at timestep $t$ can be expressed as $G_t^\pi = R_t + R_{t+1} + R_{t+2} + \dots$. This means that if the agent moves to state $\mathbf{x}_{t+1}$ from state $\mathbf{x}_t$ by taking action $a_t$ it receives reward $R_t$ and at the next timestep if it follows the same policy it will receive reward $R_{t+1}$ and so on. For an infinite horizon case, the return will blow up. This is why we use a discount factor $\gamma$ such that $$ G_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} + \dots = \sum_{t=0}^{\infty} \gamma^k R_{t+k}.$$
+
+This discount factor serves two purposes: a) it provides more weight into recent rewards and b) it helps to keep the return as a finite value. If we do not use a discount factor in the MDP definition then those MDPs are called 'undiscounted MDPs'. 
+
+But how do we maximize the return? The answer is pretty simple: by choosing the sequence of actions that provides the highest return. These actions are called 'optimal actions'. Remember that actions are chosen according to a policy $\pi:\mathcal{X} \rightarrow \mathcal{A}$. So to choose the optimal actions we need an optimal policy $\pi^*$. Now we have successfully identified the fundamental goal in this learning scheme: "how to obtian the optimal policy for sequential decision making?"
+
+To identify whether a state is good or bad we need to assign some sort of value to that state. Usually this is known as the **value function**. The agent would like to explore states which have higher values compared to the rest. To derive the value of a state we use the reward function in an intuitive way. Let's take a look. 
+$$V^\pi(\mathbf{x}) = \mathbb{E}^\pi[G_t|\mathbf{x}] = \mathbb{E}^\pi \left[R_{t} + \gamma  R_{t+1} + \dots |\mathbf{x}\right] = \mathbb{E}^\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k} |\mathbf{x}\right]$$
+Here we take the 'expectation' of the return to account for the stochasticity of the rewards. Notice that we are only taking into consideration the mean value of the return, not the variance. This sometimes cause a variance issue in developed algorithms based on this formalism. So, what does $V^\pi(\mathbf{x})$ mean? This means that the value of a state while following a policy $\pi$ is the expected value of the return. Let's develop a simple algorithm that can help us figure out the optimal policy $\pi^*$ using the value of the states. 
+
+| Algorithm 1 |
+| :---      |
+| 1 Find value of all states, $V^\pi(\mathbf{x})$ where $\mathbf{x}\in\mathcal{X}$    |
+| 2 From each state find the next best state $\mathbf{x}_b = \text{argmax}_{\mathbf{x}'} V^\pi(\mathbf{x}')$ |
+| 3 Find the optimal policy by choosing the action that led to $\mathbf{x}_b$ meaning $\pi^* = \{a: \mathbf{x} \rightarrow \mathbf{x}_b\}$|
+
+Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms. 
+
+
+
+
 
 ## Dynamic programming
+Note that all the future rewards in the return equation is unknown. **If** we knew about all the possible future rewards we are going to get from current timestep and forward, then we could obtain the exact value of the return. But unfortunately we do not have the luxury to know all these reward values apriori. This is where **Reinforcement Learning (RL)** comes into play. 
 
 ## Reinforcement learning and optimal control
 
