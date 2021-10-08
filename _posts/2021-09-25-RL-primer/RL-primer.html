@@ -2542,11 +2542,26 @@ distill-header .nav a {
 <td style="text-align: left;">2 From each state find the next best state <span class="math inline">\(\mathbf{x}_b = \text{argmax}_{\mathbf{x}'} V^\pi(\mathbf{x}')\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">3 Find the optimal policy by choosing the action that led to <span class="math inline">\(\mathbf{x}_b\)</span> meaning <span class="math inline">\(\pi^* = \{a: \mathbf{x} \rightarrow \mathbf{x}_b\}\)</span></td>
+<td style="text-align: left;">3 Find the optimal policy by choosing the action that led to <span class="math inline">\(\mathbf{x}_b\)</span> meaning <span class="math inline">\(\pi^*(\mathbf{x}) = \{a: \mathbf{x} \rightarrow \mathbf{x}_b\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms.</p>
+<p>Would not it be better if we could, rather than finding the value of a state, directly find the value of an action from a state? In that way we would be able to evaluate whether an action is good or bad based on the assigned value. Yes, we can and this is known as the action-value functions. These are also known as <strong>Q-values</strong> as they can be informally thought of as the <strong>quality of an action taken from a state</strong>. For convenience, an action taken from a state is combinedly referred as the state-action, <span class="math inline">\((\mathbf{x}, a)\)</span>, pair. So, how do we define Q-values? Looking closely to the definition of the value-functions we can similarly define the Q-values by conditioning the return on the state-action pair.</p>
+<p><span class="math display">\[Q^\pi(\mathbf{x}, a) = \mathbb{E}^\pi[G_t| \mathbf{x}, a] = \mathbb{E}^\pi \left[R_{t} + \gamma  R_{t+1} + \dots |\mathbf{x}, a\right] = \mathbb{E}^\pi\left[ \sum_{k=0}^{\infty}\gamma^k R_{t+k}|\mathbf{x}, a\right]\]</span> So, Q-values are the values assigned to the state-action pair and values are assigned to the states only. Can we derive any relationship between them based on their properties? To do that we need to break down their formal definition using the properties of the expectation operator in the above equations. Let’s break down the equation further using the definition of an expectation. We will use the following three properties of the expectation operator.</p>
+<ol type="1">
+<li><span class="math inline">\(p1\)</span>: Remind that if <span class="math inline">\(X\)</span> is a discrete random variable with finite number of outcomes <span class="math inline">\(x_1, x_2, \dots, x_k\)</span> with probabilities <span class="math inline">\(p_1, p_2, \dots, p_k\)</span> then <span class="math display">\[\begin{equation} \mathbb{E}[X] = p_1x_1 + p_2x_2 + \dots + p_kx_k\end{equation}\]</span></li>
+<li><span class="math inline">\(p2\)</span>: Expectations are linear operator, meaning <span class="math display">\[\mathbb{E}[X_1] + \mathbb{E}[X_2] = \mathbb{E}[X_1 + X_2]\]</span></li>
+<li><span class="math inline">\(p3\)</span>: For conditional expectations using partition theorem, <span class="math display">\[\mathbb{E}[X] = \sum_y p(Y=y) \mathbb{E}[X|Y=y]\]</span></li>
+</ol>
+<p>So, from the value function definition we get,</p>
+<p><span class="math display">\[\begin{aligned} V^\pi(\mathbf{x}) &amp;= \mathbb{E}^\pi [R_t + \gamma G_{t+1}|\mathbf{x}] \\ 
+&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \mathbb{E}[R_t + \gamma G_{t+1}|\mathbf{x}, a] \ \ \ \ \text{ using } p3\\ 
+&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \mathbb{E}[R_t + \gamma G_{t+1}|\mathbf{x}, a, \mathbf{x}'] \ \ \ \ \text{ using } p3\\ 
+&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[\underbrace{\mathbb{E}[R_t]}_{r(\mathbf{x}, a)} + \mathbb{E}[\gamma G_{t+1}|\mathbf{x}, a, \mathbf{x}'] \right] \ \ \ \ \text{ using } p2\\ 
+&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \underbrace{\mathbb{E}[G_{t+1}|\mathbf{x}']}_{V^\pi(\mathbf{x}')} \right] \ \ \ \ \text{ using } p2\\ 
+&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}') \right]
+\end{aligned}\]</span></p>
+<p>This gives us a recursive formula! Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms.</p>
 <h2 id="dynamic-programming">Dynamic programming</h2>
 <p>Note that all the future rewards in the return equation is unknown. <strong>If</strong> we knew about all the possible future rewards we are going to get from current timestep and forward, then we could obtain the exact value of the return. But unfortunately we do not have the luxury to know all these reward values apriori. This is where <strong>Reinforcement Learning (RL)</strong> comes into play.</p>
 <h2 id="reinforcement-learning-and-optimal-control">Reinforcement learning and optimal control</h2>
