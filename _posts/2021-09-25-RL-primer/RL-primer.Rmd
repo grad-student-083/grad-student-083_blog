@@ -75,12 +75,21 @@ Would not it be better if we could, rather than finding the value of a state, di
 $$Q^\pi(\mathbf{x}, a) = \mathbb{E}^\pi[G_t| \mathbf{x}, a] = \mathbb{E}^\pi \left[R_{t} + \gamma  R_{t+1} + \dots |\mathbf{x}, a\right] = \mathbb{E}^\pi\left[ \sum_{k=0}^{\infty}\gamma^k R_{t+k}|\mathbf{x}, a\right]$$
 So, Q-values are the values assigned to the state-action pair and values are assigned to the states only. Can we derive any relationship between them based on their properties? To do that we need to break down their formal definition using the properties of the expectation operator in the above equations. Let's break down the equation further using the definition of an expectation. We will use the following three properties of the expectation operator. 
 
-1. $p1$: Remind that if $X$ is a discrete random variable with finite number of outcomes $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_2, \dots, p_k$ then 
+<div style="background-color:rgba(0, 0, 0, 0.0470588);">
+<details>
+<summary>Expectation of a random variable</summary>
+<p>
+1. $p1$: Remember that if $X$ is a discrete random variable with finite number of outcomes $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_2, \dots, p_k$ then 
 $$\begin{equation} \mathbb{E}[X] = p_1x_1 + p_2x_2 + \dots + p_kx_k\end{equation}$$
 2. $p2$: Expectations are linear operator, meaning 
 $$\mathbb{E}[X_1] + \mathbb{E}[X_2] = \mathbb{E}[X_1 + X_2]$$
 3. $p3$: For conditional expectations using partition theorem, 
 $$\mathbb{E}[X] = \sum_y p(Y=y) \mathbb{E}[X|Y=y]$$
+</p>
+</details> 
+
+</div>
+
 
 So, from the value function definition we get, 
 
@@ -110,12 +119,10 @@ Note that all the future rewards in the return equation is unknown. **If** we kn
 
 ## Building algorithms for RL
 
-## Value based RL
-
-## Policy gradient methods
-
-## Actor critic methods
+## Types of RL algorithms 
 
 ## Sample complexity of RL algorithms 
+
+## A case study
 
 ## Conclusion 
