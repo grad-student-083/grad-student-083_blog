@@ -3187,8 +3187,75 @@ distill-header .nav a {
 &amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \underbrace{\mathbb{E}[G_{t+1}|\mathbf{x}']}_{V^\pi(\mathbf{x}')} \right] \ \ \ \ \text{ using } p2\\ 
 &amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}') \right]
 \end{aligned}\]</span></p>
-<p>This gives us a recursive formula! Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms.</p>
+<p>This gives us a recursive formula! Similarly we can formulate the Q-values.</p>
+<p><span class="math display">\[\begin{aligned}
+Q^\pi(\mathbf{x}, a) &amp;= \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a\right]\\ 
+&amp;=  \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a\right]\\
+&amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a, \mathbf{x}'\right]\\
+&amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ \mathbb{E}^\pi[R_t|\mathbf{x}, a, \mathbf{x}'] + \gamma \mathbb{E}^\pi \left[G_{t+1} | \mathbf{x}, a, \mathbf{x}'\right] \right]\\
+&amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \mathbb{E}^\pi \left[G_{t+1} | \mathbf{x}'\right] \right]\\
+&amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}')\right] \end{aligned}\]</span></p>
+<p>We can also develop relationship between the Q-values and value functions.</p>
+<p><span class="math display">\[\begin{aligned} 
+V^\pi(\mathbf{x}) &amp;= \mathbb{E}^\pi[G_t | \mathbf{x}]\\
+&amp;= \sum_a \pi(a|\mathbf{x}) \mathbb{E}^\pi[G_t|\mathbf{x}, a]\\ 
+&amp;= \sum_a \pi(a|\mathbf{x}) Q^\pi(\mathbf{x}, a)
+\end{aligned}\]</span></p>
+<p>Finally we develop the recursive formula for Q-values.</p>
+<p><span class="math display">\[\begin{aligned} 
+Q^\pi(\mathbf{x}, a) &amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}')\right]\\
+&amp;= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \sum_{a'} \pi(a'|\mathbf{x}') Q^\pi(\mathbf{x}', a') \right]
+\end{aligned}\]</span></p>
+<p>Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms.</p>
 <h2 id="dynamic-programming">Dynamic programming</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 2: Policy iteration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 2: Value iteration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+</tr>
+</tbody>
+</table>
 <p>Note that all the future rewards in the return equation is unknown. <strong>If</strong> we knew about all the possible future rewards we are going to get from current timestep and forward, then we could obtain the exact value of the return. But unfortunately we do not have the luxury to know all these reward values apriori. This is where <strong>Reinforcement Learning (RL)</strong> comes into play.</p>
 <h2 id="reinforcement-learning-and-optimal-control">Reinforcement learning and optimal control</h2>
 <h2 id="building-algorithms-for-rl">Building algorithms for RL</h2>

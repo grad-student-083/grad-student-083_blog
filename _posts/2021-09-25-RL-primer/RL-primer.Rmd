@@ -101,15 +101,50 @@ $$\begin{aligned} V^\pi(\mathbf{x}) &= \mathbb{E}^\pi [R_t + \gamma G_{t+1}|\mat
 &= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \sum_{\mathbf{x}'\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}') \right]
 \end{aligned}$$
 
+This gives us a recursive formula! Similarly we can formulate the Q-values. 
 
-This gives us a recursive formula! Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms. 
+$$\begin{aligned}
+Q^\pi(\mathbf{x}, a) &= \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a\right]\\ 
+&=  \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a\right]\\
+&= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a, \mathbf{x}'\right]\\
+&= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ \mathbb{E}^\pi[R_t|\mathbf{x}, a, \mathbf{x}'] + \gamma \mathbb{E}^\pi \left[G_{t+1} | \mathbf{x}, a, \mathbf{x}'\right] \right]\\
+&= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \mathbb{E}^\pi \left[G_{t+1} | \mathbf{x}'\right] \right]\\
+&= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}')\right] \end{aligned}$$
 
+We can also develop relationship between the Q-values and value functions. 
 
+$$\begin{aligned} 
+V^\pi(\mathbf{x}) &= \mathbb{E}^\pi[G_t | \mathbf{x}]\\
+&= \sum_a \pi(a|\mathbf{x}) \mathbb{E}^\pi[G_t|\mathbf{x}, a]\\ 
+&= \sum_a \pi(a|\mathbf{x}) Q^\pi(\mathbf{x}, a)
+\end{aligned}$$
 
+Finally we develop the recursive formula for Q-values. 
 
+$$\begin{aligned} 
+Q^\pi(\mathbf{x}, a) &= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}')\right]\\
+&= \sum_{\mathbf{x}'}p(\mathbf{x}, a, \mathbf{x}') \left[ r(\mathbf{x}, a) + \gamma \sum_{a'} \pi(a'|\mathbf{x}') Q^\pi(\mathbf{x}', a') \right]
+\end{aligned}$$
+
+Is there any way to determine the value of all the states within the state-space? Yes, these algorithms are known as dynamic programming algorithms. 
 
 ## Dynamic programming
 
+| Algorithm 2: Policy iteration |
+| :---      |
+| 1  |
+| 2 |
+| 3 |
+| 4 |
+| 5 |
+
+| Algorithm 2: Value iteration |
+| :---      |
+| 1  |
+| 2 |
+| 3 |
+| 4 |
+| 5 |
 
 
 
