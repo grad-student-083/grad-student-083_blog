@@ -1,5 +1,5 @@
 ---
-title: "Deep RL 01: DQN"
+title: "RL 02: DQN"
 description: |
   A short description of the post.
 author:
