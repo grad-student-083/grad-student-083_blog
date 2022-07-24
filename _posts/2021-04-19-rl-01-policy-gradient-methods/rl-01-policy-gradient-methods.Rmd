@@ -1,5 +1,5 @@
 ---
-title: "RL 01: Policy gradient methods"
+title: "RL 1.0: Policy gradient methods"
 description: |
   Here we take a detailed view of policy gradient methods and their intuitions. This blog discuess how REINFORCE, baseline and actor-critic algorithms came into existence.
 output:  

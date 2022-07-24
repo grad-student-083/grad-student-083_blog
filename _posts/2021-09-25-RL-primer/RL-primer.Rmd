@@ -1,5 +1,5 @@
 ---
-title: "RL 00: Reinforcement learning primer"
+title: "RL 0.0: Reinforcement learning primer"
 header-includes:
   - \usepackage{float}
   - \floatplacement{figure}{!htb}

@@ -1,5 +1,5 @@
 ---
-title: "Optimal Control 01: LQR"
+title: "Optimal Control 1.0: LQR"
 description: |
   This post is part of a series of posts on optimal control theory. We take a detalied look on how classical LQR control is derived. A simple implementation is provided for clarity.  
 output:  
