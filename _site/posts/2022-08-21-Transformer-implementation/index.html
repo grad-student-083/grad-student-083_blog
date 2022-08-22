@@ -86,36 +86,34 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-<title>The Graduate Student Perspective: RL 0.0: Reinforcement learning primer</title>
+<title>The Graduate Student Perspective: Deconstructed transformer implementation</title>
 
-<meta property="description" itemprop="description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions."/>
+<meta property="description" itemprop="description" content="A cheat sheet for implementing transformers."/>
 
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2021-09-25"/>
-<meta property="article:created" itemprop="dateCreated" content="2021-09-25"/>
+<meta property="article:published" itemprop="datePublished" content="2022-08-21"/>
+<meta property="article:created" itemprop="dateCreated" content="2022-08-21"/>
 <meta name="article:author" content="Md Ferdous Alam"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="The Graduate Student Perspective: RL 0.0: Reinforcement learning primer"/>
+<meta property="og:title" content="The Graduate Student Perspective: Deconstructed transformer implementation"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions."/>
+<meta property="og:description" content="A cheat sheet for implementing transformers."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="The Graduate Student Perspective"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="The Graduate Student Perspective: RL 0.0: Reinforcement learning primer"/>
-<meta property="twitter:description" content="A trivial attempt to unify the fundamental RL concepts in one place for building intuitions."/>
+<meta property="twitter:title" content="The Graduate Student Perspective: Deconstructed transformer implementation"/>
+<meta property="twitter:description" content="A cheat sheet for implementing transformers."/>
 
 <!--/radix_placeholder_meta_tags-->
   
-  <meta name="citation_reference" content="citation_title=Reinforcement learning: An introduction;citation_publication_date=2018;citation_publisher=MIT press;citation_author=Richard S Sutton;citation_author=Andrew G Barto" />
-  <meta name="citation_reference" content="citation_title=Reinforcement and optimal control;citation_publication_date=2019;citation_publisher=Athena Scientific;citation_author=Dimitri Bertsekas" />
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","header-includes","description","output","date","author","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["RL 0.0: Reinforcement learning primer"]},{"type":"character","attributes":{},"value":["\\usepackage{float}","\\floatplacement{figure}{!htb}","\\usepackage{algorithm}","\\usepackage{algpseudocode}"]},{"type":"character","attributes":{},"value":["A trivial attempt to unify the fundamental RL concepts in one place for building intuitions."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"character","attributes":{},"value":["09-25-2021"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Md Ferdous Alam"]},{"type":"character","attributes":{},"value":["https://ferdous-alam.github.io"]},{"type":"character","attributes":{},"value":["PhD student, MAE, The Ohio State University"]},{"type":"character","attributes":{},"value":["https://mae.osu.edu"]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","header-includes","description","output","date","author","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["Deconstructed transformer implementation"]},{"type":"character","attributes":{},"value":["\\usepackage{float}","\\floatplacement{figure}{!htb}","\\usepackage{algorithm}","\\usepackage{algpseudocode}"]},{"type":"character","attributes":{},"value":["A cheat sheet for implementing transformers."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"character","attributes":{},"value":["08-21-2022"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Md Ferdous Alam"]},{"type":"character","attributes":{},"value":["https://ferdous-alam.github.io"]},{"type":"character","attributes":{},"value":["PhD student, MAE, The Ohio State University"]},{"type":"character","attributes":{},"value":["https://mae.osu.edu"]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -3080,7 +3078,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"RL 0.0: Reinforcement learning primer","description":"A trivial attempt to unify the fundamental RL concepts in one place for building intuitions.","authors":[{"author":"Md Ferdous Alam","authorURL":"https://ferdous-alam.github.io","affiliation":"PhD student, MAE, The Ohio State University","affiliationURL":"https://mae.osu.edu","orcidID":""}],"publishedDate":"2021-09-25T00:00:00.000-04:00","citationText":"Alam, 2021"}
+{"title":"Deconstructed transformer implementation","description":"A cheat sheet for implementing transformers.","authors":[{"author":"Md Ferdous Alam","authorURL":"https://ferdous-alam.github.io","affiliation":"PhD student, MAE, The Ohio State University","affiliationURL":"https://mae.osu.edu","orcidID":""}],"publishedDate":"2022-08-21T00:00:00.000-04:00","citationText":"Alam, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -3103,18 +3101,17 @@ distill-header .nav a {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>RL 0.0: Reinforcement learning primer</h1>
+<h1>Deconstructed transformer implementation</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>A trivial attempt to unify the fundamental RL concepts in one
-place for building intuitions.</p></p>
+<p><p>A cheat sheet for implementing transformers.</p></p>
 </div>
 
 <div class="d-byline">
   Md Ferdous Alam <a href="https://ferdous-alam.github.io" class="uri">https://ferdous-alam.github.io</a> (PhD student, MAE, The
 Ohio State University)<a href="https://mae.osu.edu" class="uri">https://mae.osu.edu</a>
   
-<br />09-25-2021
+<br />08-21-2022
 </div>
 
 <div class="d-article">
@@ -3123,363 +3120,214 @@ Ohio State University)<a href="https://mae.osu.edu" class="uri">https://mae.osu.
 <h3>Contents</h3>
 <ul>
 <li><a href="#introduction" id="toc-introduction">Introduction</a></li>
-<li><a href="#online-sequential-decision-making" id="toc-online-sequential-decision-making">Online sequential decision
-making</a></li>
-<li><a href="#bandit-a-mandatory-prior-to-rl" id="toc-bandit-a-mandatory-prior-to-rl">Bandit: A mandatory prior to
-RL</a></li>
-<li><a href="#markov-decision-process-the-rl-formalism" id="toc-markov-decision-process-the-rl-formalism">Markov Decision
-Process: The RL formalism</a></li>
-<li><a href="#dynamic-programming" id="toc-dynamic-programming">Dynamic
-programming</a></li>
-<li><a href="#reinforcement-learning-and-optimal-control" id="toc-reinforcement-learning-and-optimal-control">Reinforcement
-learning and optimal control</a></li>
-<li><a href="#building-algorithms-for-rl" id="toc-building-algorithms-for-rl">Building algorithms for RL</a></li>
-<li><a href="#types-of-rl-algorithms" id="toc-types-of-rl-algorithms">Types of RL algorithms</a></li>
-<li><a href="#sample-complexity-of-rl-algorithms" id="toc-sample-complexity-of-rl-algorithms">Sample complexity of RL
-algorithms</a></li>
-<li><a href="#a-case-study" id="toc-a-case-study">A case study</a></li>
-<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
+<li><a href="#formal-algorithm" id="toc-formal-algorithm">Formal
+algorithm</a></li>
+<li><a href="#attention" id="toc-attention">Attention</a></li>
+<li><a href="#encoder" id="toc-encoder">Encoder</a></li>
+<li><a href="#decoder" id="toc-decoder">Decoder</a></li>
+<li><a href="#few-remarks" id="toc-few-remarks">Few remarks</a></li>
 </ul>
 </nav>
 </div>
 <h2 id="introduction">Introduction</h2>
-<p>Here I will try to explain how RL stems from the sequential decision
-making framework and its close relation with optimal control theory. I
-will follow two primary references, reinforcement learning and optimal
-control <span class="citation" data-cites="bertsekas2019reinforcement">(<a href="#ref-bertsekas2019reinforcement" role="doc-biblioref">Bertsekas
-2019</a>)</span> and introduction to reinforcement learning <span class="citation" data-cites="sutton2018reinforcement">(<a href="#ref-sutton2018reinforcement" role="doc-biblioref">Sutton and
-Barto 2018</a>)</span></p>
-<h2 id="online-sequential-decision-making">Online sequential decision
-making</h2>
-<p>The goal is to take sequential decisions “online” to achieve a
-certain goal; often times it is maximizing a performance objective which
-can be thougt of as a function <span class="math inline">\(J(\cdot)\)</span>. The input to this objective
-function is not important right now. Let’s call this decision maker
-“agent”. The catch is that the agent has to figure out which decision to
-take based on the observed feedback from the envrionment of its
-interest. To observe a feedback the agent has to interact with the
-envrionment through some sort of actions. So, optimization will be at
-the core of this decision making procedure while we use data collected
-in an online fashion to identify actions to take. This is why the
-“learning” happens.</p>
-<h2 id="bandit-a-mandatory-prior-to-rl">Bandit: A mandatory prior to
-RL</h2>
-<p>Consider an online sequential decision making problem where an agent
-has <span class="math inline">\(k\)</span> choices to choose an action
-and everytime it executes an action it receives a feedback from the
-environment. A fundamental question then aries for the agent: how to
-choose an action? The way it chooses an action describes its way of
-behaving in this particular environment which is known as the “policy”
-denoted as <span class="math inline">\(\pi\)</span>. Note that <span class="math inline">\(\pi\)</span> decribes how to take an action but it
-does not say how to take the best action that will maximize the
-performance objective <span class="math inline">\(J(\cdot)\)</span>. To
-identify the optimal action we need to find out the optimal policy <span class="math inline">\(\pi^*\)</span>. So, the following makes sense
-<span class="math display">\[\begin{equation}
-\pi^* = \text{argmax}_\pi J^\pi(\cdot)
-\end{equation}\]</span> where <span class="math inline">\(J^\pi(\cdot)\)</span> is the value of the
-performance objective obtained using policy <span class="math inline">\(\pi\)</span>. Note that the agent does not know
-the underlying distribution of the feedback from each action it takes.
-If it were known then the agent could easily pick the best action. This
-setting is known as the <em>bandit</em> problem or sometimes as
-“multi-armed bandit (MAB)” problem. Sometimes people call this “k-armed
-bandit” as well. Usually the feedback obtained from the environment is
-known as <strong>reward</strong> or <strong>cost</strong>.</p>
-<h2 id="markov-decision-process-the-rl-formalism">Markov Decision
-Process: The RL formalism</h2>
-<p>Until now it is clear that we are interested in sequential decision
-making. To formalize such process we will adopt the <strong>`Markov
-Decision Process (MDP)’</strong>. An MDP <span class="math inline">\(\mathcal{M}\)</span> is usually expressed as a
-tuple of these following 5-elements. <span class="math display">\[\mathcal{M} = \langle \mathcal{X}, \mathcal{A},
-\mathcal{R}, \mathcal{P}, \gamma\rangle\]</span> where,</p>
-<ul>
-<li><span class="math inline">\(\mathcal{X}\)</span> is the state-space,
-a set of states, <span class="math inline">\(\mathbf{x}\in\mathcal{X}\)</span></li>
-<li><span class="math inline">\(\mathcal{A}\)</span> is the
-action-space, a set of actions, <span class="math inline">\(a\in\mathcal{X}\)</span></li>
-<li><span class="math inline">\(\mathcal{R}\)</span> is the reward
-function, usually defined in the product space, <span class="math inline">\(\mathcal{R}:\mathcal{X}\times\mathcal{A}\rightarrow
-\mathbb{R}\)</span></li>
-<li><span class="math inline">\(\mathcal{P}\)</span> is the transition
-probability function, also known as the dynamics of the system, that
-describes the conditional probability <span class="math inline">\(p(\mathbf{x}_{t+1}|\mathbf{x}_t,
-a_t)\)</span></li>
-<li><span class="math inline">\(\gamma\)</span> is a discount factor,
-<span class="math inline">\(\gamma \in [0, 1]\)</span></li>
-</ul>
-<p>Let’s focus on how this formalism helps in sequential decision
-making. Assume that the agent is in a current state <span class="math inline">\(\mathbf{x}_t\)</span> at timestep <span class="math inline">\(t\)</span>. Based on some policy <span class="math inline">\(\pi\)</span> it takes a decision to move to state
-<span class="math inline">\(\mathbf{x}_{t+1}\)</span> by taking action
-<span class="math inline">\(a_t\)</span>. To move to that state, the
-agent needs to know the probability of moving to that state given the
-current state <span class="math inline">\(\mathbf{x}_t\)</span> and
-action <span class="math inline">\(a_t\)</span>. This is how the
-conditional probability comes into the process. Once the agent reaches
-state <span class="math inline">\(\mathbf{x}_{t+1}\)</span> it gets a
-feedback from the environment. This feedback is called a reward value,
-<span class="math inline">\(R_t\)</span>, which is usually a scalar
-numeric value. We assume that the reward value <span class="math inline">\(R_t\)</span> comes as the output from the reward
-function <span class="math inline">\(\mathcal{R}\)</span> while it takes
-<span class="math inline">\(\mathbf{x}_t\)</span> and <span class="math inline">\(a_t\)</span> as input, meaning <span class="math inline">\(\mathcal{R}(\mathbf{x}_t, a_t): \mathcal{X} \times
-\mathcal{A} \rightarrow R_t\)</span>. What if the reward function only
-depends on the current state and not the action? Then the reward
-function would be represented as <span class="math inline">\(\mathcal{R}(\mathbf{x}_t): \mathcal{X} \rightarrow
-R_t\)</span>. Similary if the reward depends on not only the current
-state and current action but also the state it ends up in, then we would
-use the description of the reward function as <span class="math inline">\(\mathcal{R}(\mathbf{x}_t, a_t, \mathbf{x}_{t+1}):
-\mathcal{X} \times \mathcal{A} \times \mathcal{X} \rightarrow
-R_t\)</span>. Finally the agent uses a discount factor <span class="math inline">\(\gamma\)</span> to put less weight onto future
-rewards and more weight into recent rewards. This makes sense because
-the agent does not want to depend strongly on the information that comes
-after many timesteps into the future. All these information can be
-combined very convenienty in an MDP. Now it should be easier to follow
-why MDP is attractive for sequential decision making.</p>
-<p>This formalism is great, but what is the goal of the agent in an MDP?
-In simplified terms the ‘goal’ of the agent is to maximize the
-accumulation of rewards. Let’s define the accumulation of rewards as
-<strong>return</strong>. The return obtained at timestep <span class="math inline">\(t\)</span> can be expressed as <span class="math inline">\(G_t^\pi = R_t + R_{t+1} + R_{t+2} +
-\dots\)</span>. This means that if the agent moves to state <span class="math inline">\(\mathbf{x}_{t+1}\)</span> from state <span class="math inline">\(\mathbf{x}_t\)</span> by taking action <span class="math inline">\(a_t\)</span> it receives reward <span class="math inline">\(R_t\)</span> and at the next timestep if it
-follows the same policy it will receive reward <span class="math inline">\(R_{t+1}\)</span> and so on. For an infinite
-horizon case, the return will blow up. This is why we use a discount
-factor <span class="math inline">\(\gamma\)</span> such that <span class="math display">\[ G_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} +
-\dots = \sum_{t=0}^{\infty} \gamma^k R_{t+k}.\]</span></p>
-<p>This discount factor serves two purposes: a) it provides more weight
-into recent rewards and b) it helps to keep the return as a finite
-value. If we do not use a discount factor in the MDP definition then
-those MDPs are called ‘undiscounted MDPs’.</p>
-<p>But how do we maximize the return? The answer is pretty simple: by
-choosing the sequence of actions that provides the highest return. These
-actions are called ‘optimal actions’. Remember that actions are chosen
-according to a policy <span class="math inline">\(\pi:\mathcal{X}
-\rightarrow \mathcal{A}\)</span>. So to choose the optimal actions we
-need an optimal policy <span class="math inline">\(\pi^*\)</span>. Now
-we have successfully identified the fundamental goal in this learning
-scheme: “how to obtian the optimal policy for sequential decision
-making?”</p>
-<p>To identify whether a state is good or bad we need to assign some
-sort of value to that state. Usually this is known as the <strong>value
-function</strong>. The agent would like to explore states which have
-higher values compared to the rest. To derive the value of a state we
-use the reward function in an intuitive way. Let’s take a look. <span class="math display">\[V^\pi(\mathbf{x}) =
-\mathbb{E}^\pi[G_t|\mathbf{x}] = \mathbb{E}^\pi \left[R_{t} +
-\gamma  R_{t+1} + \dots |\mathbf{x}\right] = \mathbb{E}^\pi\left[
-\sum_{k=0}^{\infty} \gamma^k R_{t+k} |\mathbf{x}\right]\]</span> Here we
-take the ‘expectation’ of the return to account for the stochasticity of
-the rewards. Notice that we are only taking into consideration the mean
-value of the return, not the variance. This sometimes cause a variance
-issue in developed algorithms based on this formalism. So, what does
-<span class="math inline">\(V^\pi(\mathbf{x})\)</span> mean? This means
-that the value of a state while following a policy <span class="math inline">\(\pi\)</span> is the expected value of the return.
-Let’s develop a simple algorithm that can help us figure out the optimal
-policy <span class="math inline">\(\pi^*\)</span> using the value of the
-states.</p>
+<h2 id="formal-algorithm">Formal algorithm</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 1: Encoder Decoder
+Transformer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">input: input <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1 For <span class="math inline">\(l = 1,
+2, \dots, L_{enc}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2 <span class="math inline">\(\quad x
+\leftarrow \text{EncoderLayer}(x)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3 For <span class="math inline">\(l = 1,
+2, \dots, L_{dec}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4 <span class="math inline">\(\quad x
+\leftarrow \text{DecoderLayer}(x)\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="attention">Attention</h2>
+<h3 id="scaled-dot-product-attention">Scaled dot product attention</h3>
+<p><span class="math display">\[\text{Attention}(Q, K, V) =
+\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V\]</span> Shapes of
+<span class="math inline">\(Q, K, V\)</span> matrices:</p>
+<table>
+<thead>
+<tr class="header">
+<th>symbol</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(N\)</span></td>
+<td>batch size</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L\)</span></td>
+<td>target sequence length</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S\)</span></td>
+<td>source sequence length</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(d_k\)</span></td>
+<td>dimension of query/key embedding</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(d_v\)</span></td>
+<td>dimension of value embedding</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>matrix</th>
+<th>shape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>query, <span class="math inline">\(Q\)</span></td>
+<td><span class="math inline">\((N, L, d_k)\)</span></td>
+</tr>
+<tr class="even">
+<td>key, <span class="math inline">\(K\)</span></td>
+<td><span class="math inline">\((N, S, d_k)\)</span></td>
+</tr>
+<tr class="odd">
+<td>value, <span class="math inline">\(V\)</span></td>
+<td><span class="math inline">\((N, S, d_v)\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="self-attention-and-cross-attention">Self attention and
+cross-attention</h3>
+<h3 id="multihead-attention">Multihead attention</h3>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> model dimension must be divisible by
+the number of heads, meaning in python <span class="math display">\[
+d_\text{model} \  \% \ h == 0 \]</span></p>
+</blockquote>
+<p>Multihead attention: <span class="math display">\[\text{MultiHead}(Q,
+K, V) = [\text{head}_1, \dots, \text{head}_h]W^O\]</span> where <span class="math display">\[\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K,
+VW_i^V)\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Projection weight matrix</th>
+<th>dimension</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>query projection, <span class="math inline">\(W^Q\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
+d_k}\)</span></td>
+</tr>
+<tr class="even">
+<td>key projection, <span class="math inline">\(W^K\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
+d_k}\)</span></td>
+</tr>
+<tr class="odd">
+<td>value projection, <span class="math inline">\(W^V\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
+d_v}\)</span></td>
+</tr>
+<tr class="even">
+<td>output projection, <span class="math inline">\(W^V\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{hd_v\times
+d_\text{out}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="encoder">Encoder</h2>
+<p>Encoder consists of multiple layers. Each layer consists of two
+elements, 1) self-attention and 2) feedforward network</p>
 <table>
 <colgroup>
 <col style="width: 100%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 1</th>
+<th style="text-align: left;">Algorithm 2: Encoder Layer</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">1 Find value of all states, <span class="math inline">\(V^\pi(\mathbf{x})\)</span> where <span class="math inline">\(\mathbf{x}\in\mathcal{X}\)</span></td>
+<td style="text-align: left;">input: encoder input <span class="math inline">\(x\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">2 From each state find the next best state
-<span class="math inline">\(\mathbf{x}_b =
-\text{argmax}_{\mathbf{x}&#39;} V^\pi(\mathbf{x}&#39;)\)</span></td>
+<td style="text-align: left;">1   <span class="math inline">\(x = x +
+\text{pos_encoding}(x)\)</span>      # if needed</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">3 Find the optimal policy by choosing the
-action that led to <span class="math inline">\(\mathbf{x}_b\)</span>
-meaning <span class="math inline">\(\pi^*(\mathbf{x}) = \{a: \mathbf{x}
-\rightarrow \mathbf{x}_b\}\)</span></td>
+<td style="text-align: left;">2   For <span class="math inline">\(k = 1,
+2, \dots, h\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3   <span class="math inline">\(\quad x =
+LN(x + \text{self_attention}(query=x, key=x, value=x)))\)</span>      #
+if needed</td>
 </tr>
 </tbody>
 </table>
-<p>Would not it be better if we could, rather than finding the value of
-a state, directly find the value of an action from a state? In that way
-we would be able to evaluate whether an action is good or bad based on
-the assigned value. Yes, we can and this is known as the action-value
-functions. These are also known as <strong>Q-values</strong> as they can
-be informally thought of as the <strong>quality of an action taken from
-a state</strong>. For convenience, an action taken from a state is
-combinedly referred as the state-action, <span class="math inline">\((\mathbf{x}, a)\)</span>, pair. So, how do we
-define Q-values? Looking closely to the definition of the
-value-functions we can similarly define the Q-values by conditioning the
-return on the state-action pair.</p>
-<p><span class="math display">\[Q^\pi(\mathbf{x}, a) =
-\mathbb{E}^\pi[G_t| \mathbf{x}, a] = \mathbb{E}^\pi \left[R_{t} +
-\gamma  R_{t+1} + \dots |\mathbf{x}, a\right] = \mathbb{E}^\pi\left[
-\sum_{k=0}^{\infty}\gamma^k R_{t+k}|\mathbf{x}, a\right]\]</span> So,
-Q-values are the values assigned to the state-action pair and values are
-assigned to the states only. Can we derive any relationship between them
-based on their properties? To do that we need to break down their formal
-definition using the properties of the expectation operator in the above
-equations. Let’s break down the equation further using the definition of
-an expectation. We will use the following three properties of the
-expectation operator.</p>
-<div style="background-color:rgba(0, 0, 0, 0.0470588);">
-<details>
-<summary>
-Expectation of a random variable
-</summary>
-<p>
-<ol type="1">
-<li><span class="math inline">\(p1\)</span>: Remember that if <span class="math inline">\(X\)</span> is a discrete random variable with
-finite number of outcomes <span class="math inline">\(x_1, x_2, \dots,
-x_k\)</span> with probabilities <span class="math inline">\(p_1, p_2,
-\dots, p_k\)</span> then <span class="math display">\[\begin{equation}
-\mathbb{E}[X] = p_1x_1 + p_2x_2 + \dots +
-p_kx_k\end{equation}\]</span></li>
-<li><span class="math inline">\(p2\)</span>: Expectations are linear
-operator, meaning <span class="math display">\[\mathbb{E}[X_1] +
-\mathbb{E}[X_2] = \mathbb{E}[X_1 + X_2]\]</span></li>
-<li><span class="math inline">\(p3\)</span>: For conditional
-expectations using partition theorem, <span class="math display">\[\mathbb{E}[X] = \sum_y p(Y=y)
-\mathbb{E}[X|Y=y]\]</span></li>
-</ol>
-</p>
-</details>
-</div>
-<p>So, from the value function definition we get,</p>
-<p><span class="math display">\[\begin{aligned} V^\pi(\mathbf{x}) &amp;=
-\mathbb{E}^\pi [R_t + \gamma G_{t+1}|\mathbf{x}] \\
-&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x}) \mathbb{E}[R_t + \gamma
-G_{t+1}|\mathbf{x}, a] \ \ \ \ \text{ using } p3\\
-&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x})
-\sum_{\mathbf{x}&#39;\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a,
-\mathbf{x}&#39;) \mathbb{E}[R_t + \gamma G_{t+1}|\mathbf{x}, a,
-\mathbf{x}&#39;] \ \ \ \ \text{ using } p3\\
-&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x})
-\sum_{\mathbf{x}&#39;\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a,
-\mathbf{x}&#39;) \left[\underbrace{\mathbb{E}[R_t]}_{r(\mathbf{x}, a)} +
-\mathbb{E}[\gamma G_{t+1}|\mathbf{x}, a, \mathbf{x}&#39;] \right] \ \ \
-\ \text{ using } p2\\
-&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x})
-\sum_{\mathbf{x}&#39;\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a,
-\mathbf{x}&#39;) \left[ r(\mathbf{x}, a) + \gamma
-\underbrace{\mathbb{E}[G_{t+1}|\mathbf{x}&#39;]}_{V^\pi(\mathbf{x}&#39;)}
-\right] \ \ \ \ \text{ using } p2\\
-&amp;= \sum_{a\in\mathcal{A}} \pi(a|\mathbf{x})
-\sum_{\mathbf{x}&#39;\in\mathcal{\mathcal{X}}} p(\mathbf{x}, a,
-\mathbf{x}&#39;) \left[ r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}&#39;)
-\right]
-\end{aligned}\]</span></p>
-<p>This gives us a recursive formula! Similarly we can formulate the
-Q-values.</p>
-<p><span class="math display">\[\begin{aligned}
-Q^\pi(\mathbf{x}, a) &amp;= \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} |
-\mathbf{x}, a\right]\\
-&amp;=  \mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x},
-a\right]\\
-&amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a, \mathbf{x}&#39;)
-\mathbb{E}^\pi\left[ R_t + \gamma G_{t+1} | \mathbf{x}, a,
-\mathbf{x}&#39;\right]\\
-&amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a, \mathbf{x}&#39;) \left[
-\mathbb{E}^\pi[R_t|\mathbf{x}, a, \mathbf{x}&#39;] + \gamma
-\mathbb{E}^\pi \left[G_{t+1} | \mathbf{x}, a, \mathbf{x}&#39;\right]
-\right]\\
-&amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a, \mathbf{x}&#39;) \left[
-r(\mathbf{x}, a) + \gamma \mathbb{E}^\pi \left[G_{t+1} |
-\mathbf{x}&#39;\right] \right]\\
-&amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a, \mathbf{x}&#39;) \left[
-r(\mathbf{x}, a) + \gamma V^\pi(\mathbf{x}&#39;)\right]
-\end{aligned}\]</span></p>
-<p>We can also develop relationship between the Q-values and value
-functions.</p>
-<p><span class="math display">\[\begin{aligned}
-V^\pi(\mathbf{x}) &amp;= \mathbb{E}^\pi[G_t | \mathbf{x}]\\
-&amp;= \sum_a \pi(a|\mathbf{x}) \mathbb{E}^\pi[G_t|\mathbf{x}, a]\\
-&amp;= \sum_a \pi(a|\mathbf{x}) Q^\pi(\mathbf{x}, a)
-\end{aligned}\]</span></p>
-<p>Finally we develop the recursive formula for Q-values.</p>
-<p><span class="math display">\[\begin{aligned}
-Q^\pi(\mathbf{x}, a) &amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a,
-\mathbf{x}&#39;) \left[ r(\mathbf{x}, a) + \gamma
-V^\pi(\mathbf{x}&#39;)\right]\\
-&amp;= \sum_{\mathbf{x}&#39;}p(\mathbf{x}, a, \mathbf{x}&#39;) \left[
-r(\mathbf{x}, a) + \gamma \sum_{a&#39;} \pi(a&#39;|\mathbf{x}&#39;)
-Q^\pi(\mathbf{x}&#39;, a&#39;) \right]
-\end{aligned}\]</span></p>
-<p>Is there any way to determine the value of all the states within the
-state-space? Yes, these algorithms are known as dynamic programming
-algorithms.</p>
-<h2 id="dynamic-programming">Dynamic programming</h2>
+<h3 id="self-attention-block">self-attention block</h3>
+<h3 id="feed-forward-block">Feed forward block</h3>
+<h2 id="decoder">Decoder</h2>
+<p>Decoder consists of multiple layers. Each layer consists of three
+elements, 1) self-attention, 2) cross-attention and 3) feed forward
+network</p>
 <table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 2: Policy iteration</th>
+<th style="text-align: left;">Algorithm 3: Decoder block</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">1</td>
+<td style="text-align: left;">input: decoder input <span class="math inline">\(x\)</span>, encoder output <span class="math inline">\(memory\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">1   <span class="math inline">\(x = x +
+\text{pos_encoding}(x)\)</span>      # if needed</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">3</td>
+<td style="text-align: left;">2   <span class="math inline">\(x = LN(x +
+\text{self_attention}(query=x, key=x, value=x)))\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">4</td>
+<td style="text-align: left;">3   <span class="math inline">\(x = LN(x +
+\text{cross_attention}(query=x, key=memory, value=memory))\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">5</td>
+<td style="text-align: left;">4   <span class="math inline">\(x = LN(x +
+FFN(x))\)</span></td>
 </tr>
 </tbody>
 </table>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Algorithm 2: Value iteration</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">5</td>
-</tr>
-</tbody>
-</table>
-<p>Note that all the future rewards in the return equation is unknown.
-<strong>If</strong> we knew about all the possible future rewards we are
-going to get from current timestep and forward, then we could obtain the
-exact value of the return. But unfortunately we do not have the luxury
-to know all these reward values apriori. This is where
-<strong>Reinforcement Learning (RL)</strong> comes into play.</p>
-<h2 id="reinforcement-learning-and-optimal-control">Reinforcement
-learning and optimal control</h2>
-<h2 id="building-algorithms-for-rl">Building algorithms for RL</h2>
-<h2 id="types-of-rl-algorithms">Types of RL algorithms</h2>
-<h2 id="sample-complexity-of-rl-algorithms">Sample complexity of RL
-algorithms</h2>
-<h2 id="a-case-study">A case study</h2>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="few-remarks">Few remarks</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-bertsekas2019reinforcement" class="csl-entry" role="doc-biblioentry">
-Bertsekas, Dimitri. 2019. <em>Reinforcement and Optimal Control</em>.
-Athena Scientific.
-</div>
-<div id="ref-sutton2018reinforcement" class="csl-entry" role="doc-biblioentry">
-Sutton, Richard S, and Andrew G Barto. 2018. <em>Reinforcement Learning:
-An Introduction</em>. MIT press.
-</div>
-</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

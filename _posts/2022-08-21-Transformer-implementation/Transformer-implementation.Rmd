@@ -1,0 +1,107 @@
+---
+title: "Deconstructed transformer implementation"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{!htb}
+  - \usepackage{algorithm}
+  - \usepackage{algpseudocode}
+  
+description: |
+  A cheat sheet for implementing transformers.
+  
+output:  
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+
+date: 08-21-2022
+author:
+  - name: Md Ferdous Alam
+    url: https://ferdous-alam.github.io
+    affiliation: PhD student, MAE, The Ohio State University
+    affiliation_url: https://mae.osu.edu
+
+bibliography: biblio.bib
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+## Formal algorithm 
+| Algorithm 1: Encoder Decoder Transformer|
+| :---      |
+| input: input $x$ |
+| 1  For $l = 1, 2, \dots, L_{enc}$|
+| 2  $\quad  x \leftarrow \text{EncoderLayer}(x)$|
+| 3  For $l = 1, 2, \dots, L_{dec}$|
+| 4  $\quad  x \leftarrow \text{DecoderLayer}(x)$|
+
+
+
+## Attention 
+
+
+### Scaled dot product attention
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+Shapes of $Q, K, V$ matrices: 
+
+  | symbol | description |
+  | -----  | ----- |
+  | $N$ | batch size | 
+  | $L$ | target sequence length | 
+  | $S$ | source sequence length | 
+  | $d_k$ | dimension of query/key embedding | 
+  | $d_v$ | dimension of value embedding | 
+
+  
+  | matrix | shape |
+  | -----  | ----- |
+  | query, $Q$ | $(N, L, d_k)$ | 
+  | key, $K$ | $(N, S, d_k)$ | 
+  | value, $V$ | $(N, S, d_v)$ | 
+
+### Self attention and cross-attention
+
+### Multihead attention
+
+> **_NOTE:_**  model dimension must be divisible by the number of heads, meaning in python $$ d_\text{model} \  \% \ h == 0 $$
+
+Multihead attention: 
+$$\text{MultiHead}(Q, K, V) = [\text{head}_1, \dots, \text{head}_h]W^O$$
+where $$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
+
+  | Projection weight matrix | dimension |
+  | -----  | ----- |
+  | query projection, $W^Q$ | $\mathbb{R}^{d_\text{model}\times d_k}$ | 
+  | key projection, $W^K$ |$\mathbb{R}^{d_\text{model}\times d_k}$ | 
+  | value projection, $W^V$ | $\mathbb{R}^{d_\text{model}\times d_v}$ |
+  | output projection, $W^V$ | $\mathbb{R}^{hd_v\times d_\text{out}}$ |
+  
+
+## Encoder
+Encoder consists of multiple layers. Each layer consists of two elements, 1) self-attention and 2) feedforward network
+
+| Algorithm 2: Encoder Layer|
+| :---      |
+| input: encoder input $x$ |
+| 1 \ \ $x = x + \text{pos_encoding}(x)$ \ \ \ \ \ # if needed|
+|2 \ \ For $k = 1, 2, \dots, h$ |
+|3 \ \ $\quad x = LN(x + \text{self_attention}(query=x, key=x, value=x)))$ \ \ \ \ \ # if needed|
+
+### self-attention block
+### Feed forward block
+## Decoder
+Decoder consists of multiple layers. Each layer consists of three elements, 1) self-attention, 2) cross-attention and 3) feed forward network
+
+| Algorithm 3: Decoder block|
+| :---      |
+| input: decoder input $x$, encoder output $memory$ |
+| 1 \ \ $x = x + \text{pos_encoding}(x)$ \ \ \ \ \ # if needed|
+| 2 \ \ $x = LN(x + \text{self_attention}(query=x, key=x, value=x)))$ |
+| 3 \ \ $x = LN(x + \text{cross_attention}(query=x, key=memory, value=memory))$ |
+| 4 \ \ $x = LN(x + FFN(x))$ |
+
+## Few remarks 
