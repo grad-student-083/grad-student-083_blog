@@ -29,6 +29,8 @@ bibliography: biblio.bib
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+> **_NOTE:_** Code implementation can be found at this [repo](https://github.com/ferdous-alam/DeconstructedML/tree/master/Deconstructed_Deep_learning/Transformers).
+
 ## Introduction
 Few symbols: 
 
