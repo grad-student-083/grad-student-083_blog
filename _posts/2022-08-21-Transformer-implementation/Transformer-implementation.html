@@ -2505,6 +2505,7 @@ algorithm</a></li>
 <li><a href="#attention" id="toc-attention">Attention</a></li>
 <li><a href="#encoder" id="toc-encoder">Encoder</a></li>
 <li><a href="#decoder" id="toc-decoder">Decoder</a></li>
+<li><a href="#bert-and-gpt" id="toc-bert-and-gpt">BERT and GPT</a></li>
 <li><a href="#few-remarks" id="toc-few-remarks">Few remarks</a></li>
 </ul>
 </nav>
@@ -2599,9 +2600,70 @@ this <a href="https://github.com/ferdous-alam/DeconstructedML/tree/master/Decons
 <td><span class="math inline">\((l_z, l_x)\)</span></td>
 <td>memory mask</td>
 </tr>
+<tr class="even">
+<td><span class="math inline">\(L_{enc}\)</span></td>
+<td>-</td>
+<td>number of encoder layers</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(L_{dec}\)</span></td>
+<td>-</td>
+<td>number of decoder layers</td>
+</tr>
 </tbody>
 </table>
+<p>We start with the originally proposed encoder-decoder (ED)
+transformer [cite]. If we only use the encoder of the transformer, then
+it is similar to the BERT [cite] model and if we only use the decoder of
+the transformer then it is similar to the GPT model [cite]. For clarity,
+we consider a batched source sequence data <span class="math inline">\(\mathbf{Z}\)</span> which consists of <span class="math inline">\(B\)</span> sequences. Each sequence is of length
+<span class="math inline">\(l_z\)</span>. This means that the sequence
+consists of <span class="math inline">\(l_z\)</span> number of tokens or
+vector representation of some input.</p>
+<p><span class="math display">\[ \mathbf{Z} = \begin{bmatrix}
+\mathbf{z}^1_1 &amp; \mathbf{z}^1_2 &amp; \dots &amp; \mathbf{z}^1_{l_z}
+\\
+                \mathbf{z}^2_1 &amp; \mathbf{z}^2_2 &amp; \dots &amp;
+\mathbf{z}^2_{l_z} \\
+                \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+                \mathbf{z}^{B}_1 &amp; \mathbf{z}^{B}_2 &amp; \dots
+&amp; \mathbf{z}^{B}_{l_z}
+                \end{bmatrix}\]</span></p>
+<p>where, <span class="math display">\[\mathbf{z}_i \in
+\mathbb{R}^{1\times d_\text{model}}, \ \ \ \ \ i = 1, 2, \dots,
+l_z\]</span></p>
+<p>Similarly, we consider a batched target sequence data <span class="math inline">\(\mathbf{X}\)</span> that contain <span class="math inline">\(B\)</span> sequences in total. Each target
+sequence is of length <span class="math inline">\(l_x\)</span>.</p>
+<p><span class="math display">\[ \mathbf{X} = \begin{bmatrix}
+\mathbf{x}^1_1 &amp; \mathbf{x}^1_2 &amp; \dots &amp; \mathbf{x}^1_{l_x}
+\\
+                \mathbf{x}^2_1 &amp; \mathbf{x}^2_2 &amp; \dots &amp;
+\mathbf{x}^2_{l_x} \\
+                \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+                \mathbf{x}^{B}_1 &amp; \mathbf{x}^{B}_2 &amp; \dots
+&amp; \mathbf{x}^{B}_{l_x}
+                \end{bmatrix}\]</span></p>
+<p>where, <span class="math display">\[\mathbf{x}_i \in
+\mathbb{R}^{1\times d_\text{model}}, \ \ \ \ \ i = 1, 2, \dots,
+l_x\]</span></p>
+<p>The goal is to learn a representation of the target sequence, <span class="math inline">\(\mathbf{X}\)</span>, that utilizes multi-head
+attention to capture important correlation within the sequence. Finally,
+people use these representations for various downstream tasks
+i.e. machine translation [cite], next word prediction [cite], computer
+vision [cite], reinforcement learning [cite] etc.</p>
+<h3 id="mask">Mask</h3>
+<p><span class="math display">\[\text{Mask}[t_z, t_x] = \begin{cases} 1
+\quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_z
+\leq t_x]]  \quad \text{for unidirectional attention}
+\end{cases}\]</span></p>
 <h2 id="formal-algorithm">Formal algorithm</h2>
+<p>First we provide a pseudoode of the encoder-decoder transformer
+algorithm. The following pseudocode is a simplified version of the
+formal algorithm presented in this paper [cite]. Initially I wanted to
+include the original pseudocode from the paper. But it seems like a
+handling a lot of notations while thinking of implementation. So, I
+added some trivial abstraction on top of that so the implementation
+becomes more convenient.</p>
 <h3 id="encoder-decoder-transformer">Encoder-decoder transformer</h3>
 <table>
 <colgroup>
@@ -2633,8 +2695,8 @@ multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{Z} \leftarrow \text{EncoderLayer}(\mathbf{Z},
-\mathbf{M}_z)\)</span></td>
+\mathbf{Z} \leftarrow \text{EncoderLayer}(\mathbf{Z}, \mathbf{M}_{zz}:
+Optional)\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">3 <span class="math inline">\(\text{memory} = \mathbf{Z}\)</span></td>
@@ -2646,11 +2708,305 @@ multi-head attention which can be used for downstream applications</td>
 <tr class="odd">
 <td style="text-align: left;">5 <span class="math inline">\(\quad
 \mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \text{memory},
-\mathbf{M}_x: Optional, \mathbf{M}_{zx}: Optional)\)</span></td>
+\mathbf{M}_{xx}: Optional, \mathbf{M}_{zz}: Optional, \mathbf{M}_{zx}:
+Optional)\)</span></td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong><em>Implementation note:</em></strong> For efficiency,
+deepcopy of a single encoder and decoder layer can be performed <span class="math inline">\(L_{enc}\)</span> and <span class="math inline">\(L_{dec}\)</span> times</p>
+</blockquote>
+<p>The training procedure is fairly simple and basically same as other
+neural network models. To make a broaded sense, I am not including any
+NLP specific output from the model. So, the output from the model is
+what we are interested in. We will also need to supply the target so
+that loss can be caluculated using the output and the target values.
+Finally we perform gradient descent to minimize the loss.</p>
+<h3 id="training-procedure">Training procedure</h3>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 4: Training Transformer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\text{input: }
+\text{class EDTransformer, class loss_func, learning rate
+$\eta$}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1 <span class="math inline">\(\text{for }
+i = 1, 2, \dots, N_\text{epochs}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2 <span class="math inline">\(\quad
+\text{for } (\mathbf{Z}, \mathbf{X}, \text{target}) \text{ in
+train_dataloader } \quad \quad \text{# typical data loader for training
+data}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3 <span class="math inline">\(\quad \quad
+output \leftarrow \text{EDTransformer}(\mathbf{Z}, \mathbf{X},
+\mathbf{M}_{xx}: Optional, \mathbf{M}_{zz}: Optional, \mathbf{M}_{zx}:
+Optional)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4 <span class="math inline">\(\quad \quad
+\mathcal{L}(\mathbf{\theta}) = \text{loss_func}(\text{output,
+target})\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5 <span class="math inline">\(\quad \quad
+\theta \leftarrow \theta - \eta \cdot
+\nabla\mathcal{L}(\theta)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6 <span class="math inline">\(\text{return
+} \mathbf{\theta}\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="attention">Attention</h2>
+<p>Transformers use multi-head attention to learn the contextual
+information of a sequence.</p>
+<h3 id="multihead-attention">Multihead attention</h3>
+<p>The original <span class="math inline">\(Q, K, V\)</span> matrices
+are projected into <span class="math inline">\(h\)</span> smaller
+matrices of using parameter matrices <span class="math inline">\(W_i^Q,
+W_i^K, W_i^V\)</span>. Then attention is calculated for all these
+smaller matrices and concatened again to calculate attention for the
+full size input.</p>
+<table>
+<thead>
+<tr class="header">
+<th>argument</th>
+<th>tensor shape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>query <span class="math inline">\(Q\)</span></td>
+<td><span class="math inline">\((B, l_x, d_\text{model})\)</span></td>
+</tr>
+<tr class="even">
+<td>key, <span class="math inline">\(K\)</span></td>
+<td><span class="math inline">\((B, l_z, d_\text{model})\)</span></td>
+</tr>
+<tr class="odd">
+<td>value, <span class="math inline">\(V\)</span></td>
+<td><span class="math inline">\((B, l_z, d_\text{model})\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{multi_attn}\)</span></td>
+<td><span class="math inline">\((B, l_x, d_\text{out})\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s recall the original definition of multi-head attention: <span class="math display">\[\text{Multi-head attention, }\mathbf{Y}(Q, K, V)
+= [\mathbf{S}_1; \dots; \mathbf{S}_h]W^O\]</span> where <span class="math inline">\(\mathbf{S}_i\)</span> is the <span class="math inline">\(i\)</span>-th single head attention score.</p>
+<p>As we are dividing the original <span class="math inline">\(Q, K,
+V\)</span> matrices into smaller matrices, dimension of <span class="math inline">\(Q, K, V\)</span> must be divisible by the number
+of heads, <span class="math inline">\(h\)</span>. This is one way to do
+that if we want to divide <span class="math inline">\(Q, K, V\)</span>
+into the same dimension of smaller matrices. <span class="math display">\[ d_k = d_v = d_\text{model} / h\]</span>
+Alternatively, we can divide <span class="math inline">\(Q, K,
+V\)</span> into different dimensions of smaller matrices as long as they
+match the original dimension.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameters</th>
+<th>dimension</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>query projection FFN, <span class="math inline">\(W^Q\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
+d_k}\)</span></td>
+</tr>
+<tr class="even">
+<td>key projection FFN, <span class="math inline">\(W^K\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
+d_k}\)</span></td>
+</tr>
+<tr class="odd">
+<td>value projection FFN, <span class="math inline">\(W^V\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{d_\text{out}\times
+d_v}\)</span></td>
+</tr>
+<tr class="even">
+<td>output projection FFN, <span class="math inline">\(W^O\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^{hd_v\times
+d_\text{out}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>So, these parameter weight matrices help to project the original
+<span class="math inline">\(Q, K, V\)</span> into smaller <span class="math inline">\(h\)</span> number of <span class="math inline">\(q, k, v\)</span> matrices for multi-head purpose.
+<span class="math display">\[\text{query projection, }W_i^Q: Q
+\rightarrow \mathbf{q}_i\]</span> <span class="math display">\[\text{key
+projection, }W_i^K: K \rightarrow \mathbf{k}_i\]</span> <span class="math display">\[\text{value projection, }W_i^V: V \rightarrow
+\mathbf{v}_i\]</span> For efficient implementation we calculate the
+attention score for all heads simultaneously by reshaping the tensors.
+So, the shape of the smaller tensors end up being the following,</p>
+<table>
+<thead>
+<tr class="header">
+<th>tensor</th>
+<th>expression</th>
+<th>shape</th>
+<th>efficient implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{q}_i\)</span></td>
+<td><span class="math inline">\(QW^Q_i\)</span></td>
+<td><span class="math inline">\((B, l_x, d_k)\)</span></td>
+<td><span class="math inline">\((B, h, l_x, d_k)\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{k}_i\)</span></td>
+<td><span class="math inline">\(KW^K_i\)</span></td>
+<td><span class="math inline">\((B, l_z, d_k)\)</span></td>
+<td><span class="math inline">\((B, h, l_z, d_k)\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{v}_i\)</span></td>
+<td><span class="math inline">\(VW^V_i\)</span></td>
+<td><span class="math inline">\((B, l_z, d_v)\)</span></td>
+<td><span class="math inline">\((B, h, l_z, d_v)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Note that, for efficient implementation, we calculate <span class="math inline">\(\mathbf{q}_i, \mathbf{k}_i, \mathbf{v}_i\)</span>
+for all heads simulatenously.</p>
+<h3 id="scaled-dot-product-attention">Scaled dot product attention</h3>
+<p>Now, we can calculate attention score, not attention values, using
+the originally proposed formula</p>
+<p><span class="math display">\[\mathbf{S}_i(Q, K, V) =
+\text{softmax}\left(\frac{q_ik_i^T}{\sqrt{d_k}}\right)v_i\]</span> Next
+we concatenate all the attention score to get the original dimension,
+<span class="math display">\[\mathbf{S} \leftarrow [\mathbf{S}^1,
+\mathbf{S}^2, \dots, \mathbf{S}^h]\]</span></p>
+<blockquote>
+<p><strong><em>Implementation note:</em></strong> For efficiency, we can
+implement the heads simultaneously by reshapin the tensors, no need to
+concat later either</p>
+</blockquote>
+<p>Finally, the attention values would be the following, <span class="math display">\[\mathbf{Y} = \mathbf{S}\mathbf{W}^O\]</span>
+Shape of the input and output tensors would be the follwoing</p>
+<table>
+<thead>
+<tr class="header">
+<th>tensor</th>
+<th>shape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{S}\)</span></td>
+<td><span class="math inline">\((B, l_x, h*d_v)\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{Y}\)</span></td>
+<td><span class="math inline">\((B, l_x, d_\text{out})\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="self-attention-cross-attention">Self attention,
+cross-attention</h3>
+<p>Depending on how we create <span class="math inline">\(Q, K,
+V\)</span> we can define two types of attention mechanism.</p>
+<ol type="1">
+<li>self-attention: Same input, i.e. <span class="math inline">\(\mathbf{X}\)</span> or <span class="math inline">\(\mathbf{Z}\)</span> is used to represent all three
+matrices, so <span class="math display">\[\begin{matrix} \mathbf{Q} =
+\mathbf{X} \\ \mathbf{K} = \mathbf{X} \\ \mathbf{V} = \mathbf{X}
+\end{matrix}\]</span></li>
+<li>cross-attention: input, <span class="math inline">\(\mathbf{X}\)</span> is used to represent the
+query, but output from another encoder, called <span class="math inline">\(\text{memory}\)</span>, is used to represent key
+and value, so<br />
+<span class="math display">\[\begin{matrix} \mathbf{Q} = \mathbf{X} \\
+\mathbf{K} = \text{memory} \\ \mathbf{V} = \text{memory}
+\end{matrix}\]</span></li>
+</ol>
+<h2 id="encoder">Encoder</h2>
+<p>Each encoder layer consists of two elements, 1) self-attention and 2)
+feedforward network (FFN)</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 2: Encoder Layer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">input: encoder input <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\text{class MultiheadAttention}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1   For <span class="math inline">\(k = 1,
+2, \dots, h\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2   <span class="math inline">\(\quad
+\mathbf{Z} = LN(\mathbf{Z} + \text{MultiheadAttention}(query=\mathbf{Z},
+key=\mathbf{Z}, value=\mathbf{Z})))\)</span></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong><em>Implementation note:</em></strong> As we are implementing
+the heads simultaneously, the loop is not really needed.</p>
+</blockquote>
+<h2 id="decoder">Decoder</h2>
+<p>Each decoder layer consists of three elements, 1) self-attention, 2)
+cross-attention and 3) feed forward network</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 3: Decoder layer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">input: decoder input <span class="math inline">\(\mathbf{X}\)</span>, encoder output <span class="math inline">\(\text{memory}\)</span>, <span class="math inline">\(\text{class MultiheadAttention}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2   <span class="math inline">\(\mathbf{X}
+= LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X},
+key=\mathbf{X}, value=\mathbf{X})))\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3   <span class="math inline">\(\mathbf{X}
+= LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X},
+key=memory, value=memory))\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4   <span class="math inline">\(\mathbf{X}
+= LN(\mathbf{X} + FFN(\mathbf{X}))\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="bert-and-gpt">BERT and GPT</h2>
 <h3 id="encoder-transformer-bert">Encoder transformer (BERT)</h3>
+<p>Now, we can define the BERT model in a very straightforward
+fashion.</p>
 <table>
 <colgroup>
 <col style="width: 100%" />
@@ -2678,11 +3034,13 @@ multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X}, \mathbf{M}_x
-\equiv 1)\)</span></td>
+\mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X},
+\mathbf{M}_{xx}\equiv 1)\)</span></td>
 </tr>
 </tbody>
 </table>
+<p>Similarly, the GPT model can be presented as the following
+pseudocode.</p>
 <h3 id="decoder-transformer-gpt">Decoder transformer (GPT)</h3>
 <table>
 <colgroup>
@@ -2711,256 +3069,8 @@ multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \mathbf{M}_x[t,
+\mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \mathbf{M}_{xx}[t,
 t&#39;] = [[t\leq t&#39;]])\)</span></td>
-</tr>
-</tbody>
-</table>
-<h3 id="training-procedure">Training procedure</h3>
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Algorithm 4: Training Transformer</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">\(\text{input:
-}\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1 <span class="math inline">\(\text{for }
-i = 1, 2, \dots, N_\text{epochs}\)</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">2 <span class="math inline">\(\quad
-\text{for } (\mathbf{Z}, \mathbf{X}, \text{target})\)</span> in
-train_dataloader</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">3 <span class="math inline">\(\quad \quad
-output \leftarrow \text{EDTransformer}(\mathbf{Z},
-\mathbf{X})\)</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">4 <span class="math inline">\(\quad \quad
-\mathcal{L}(\mathbf{\theta}) = \text{loss_func}(\text{output,
-target})\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5 <span class="math inline">\(\quad \quad
-\theta \leftarrow \theta - \eta \cdot
-\nabla\mathcal{L}(\theta)\)</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6 <span class="math inline">\(\text{return
-} \mathbf{\theta}\)</span></td>
-</tr>
-</tbody>
-</table>
-<h2 id="attention">Attention</h2>
-<h3 id="multihead-attention">Multihead attention</h3>
-<p>The original <span class="math inline">\(Q, K, V\)</span> matrices
-are projected into <span class="math inline">\(h\)</span> smaller
-matrices of using parameter matrices <span class="math inline">\(W_i^Q,
-W_i^K, W_i^V\)</span>. Then attention is calculated for all these
-smaller matrices and concatened again to calculate attention for the
-full size input.</p>
-<blockquote>
-<p><strong><em>NOTE:</em></strong> model dimension must be divisible by
-the number of heads</p>
-</blockquote>
-<blockquote>
-<p><strong><em>Code:</em></strong> <span class="math display">\[\text{multi_attn} = \text{MultiheadAttention}(Q,
-K, V)\]</span></p>
-</blockquote>
-<table>
-<thead>
-<tr class="header">
-<th>argument</th>
-<th>tensor shape</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>query <span class="math inline">\(Q\)</span></td>
-<td><span class="math inline">\((B, l_x, d_\text{model})\)</span></td>
-</tr>
-<tr class="even">
-<td>key, <span class="math inline">\(K\)</span></td>
-<td><span class="math inline">\((B, l_z, d_\text{model})\)</span></td>
-</tr>
-<tr class="odd">
-<td>value, <span class="math inline">\(V\)</span></td>
-<td><span class="math inline">\((B, l_x, d_\text{model})\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\text{multi_attn}\)</span></td>
-<td><span class="math inline">\((B, l_x, d_\text{out})\)</span></td>
-</tr>
-</tbody>
-</table>
-<p>Multihead attention: <span class="math display">\[\text{MultiHead}(Q,
-K, V) = [\text{head}_1; \dots; \text{head}_h]W^O\]</span> where <span class="math display">\[\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K,
-VW_i^V)\]</span></p>
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Projection weight</th>
-<th>dimension</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>query projection feed forward NN, <span class="math inline">\(W^Q\)</span></td>
-<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
-d_k}\)</span></td>
-</tr>
-<tr class="even">
-<td>key projection feed forward NN, <span class="math inline">\(W^K\)</span></td>
-<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
-d_k}\)</span></td>
-</tr>
-<tr class="odd">
-<td>value projection feed forward NN, <span class="math inline">\(W^V\)</span></td>
-<td><span class="math inline">\(\mathbb{R}^{d_\text{model}\times
-d_v}\)</span></td>
-</tr>
-<tr class="even">
-<td>output projection feed forward NN, <span class="math inline">\(W^O\)</span></td>
-<td><span class="math inline">\(\mathbb{R}^{hd_v\times
-d_\text{out}}\)</span></td>
-</tr>
-</tbody>
-</table>
-<h3 id="scaled-dot-product-attention">Scaled dot product attention</h3>
-<p><span class="math display">\[W_i^Q: Q \rightarrow q\]</span> <span class="math display">\[W_i^K: K \rightarrow k\]</span> <span class="math display">\[W_i^V: V \rightarrow v\]</span></p>
-<p><span class="math display">\[\text{Attention}(q, k, v) =
-\text{softmax}\left(\frac{qk^T}{\sqrt{d_k}}\right)v\]</span></p>
-<blockquote>
-<p><strong><em>Code:</em></strong> <span class="math display">\[
-\text{attention, attention_weights} =
-\text{_scaled_dot_product_attention}(q, k, v) \]</span></p>
-</blockquote>
-<p>Shape of the input and output to this function are the following:</p>
-<table>
-<thead>
-<tr class="header">
-<th>argument</th>
-<th>tensor shape</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>parallel sub-queries, <span class="math inline">\(q\)</span></td>
-<td><span class="math inline">\((B, h, L, d_k)\)</span></td>
-</tr>
-<tr class="even">
-<td>parallel sub-keys, <span class="math inline">\(k\)</span></td>
-<td><span class="math inline">\((B, h, S, d_k)\)</span></td>
-</tr>
-<tr class="odd">
-<td>parallel sub-values, <span class="math inline">\(v\)</span></td>
-<td><span class="math inline">\((B, h, S, d_v)\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\text{attention}\)</span></td>
-<td><span class="math inline">\((B, h, L, d_v)\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\text{attention_weights}\)</span></td>
-<td><span class="math inline">\((B, h, L, S)\)</span></td>
-</tr>
-</tbody>
-</table>
-<h3 id="self-attention-and-cross-attention">Self attention and
-cross-attention</h3>
-<p>Depending on how we create <span class="math inline">\(Q, K,
-V\)</span> we can define two types of attention mechanism.</p>
-<ol type="1">
-<li>self-attention: input, <span class="math inline">\(X\)</span> is
-used to represent all three matrices, so <span class="math inline">\(Q =
-X, K = X, V = X\)</span></li>
-<li>cross-attention: input, <span class="math inline">\(X\)</span> is
-used to represent the query matrix but output from another encoder is
-used to represent key and value matrices, so <span class="math inline">\(Q = X, K = memory, V = memory\)</span></li>
-</ol>
-<h3 id="mask">Mask</h3>
-<p><span class="math display">\[\text{Mask}[t_z, t_x] = \begin{cases} 1
-\quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_z
-\leq t_x]]  \quad \text{for unidirectional attention}
-\end{cases}\]</span></p>
-<h2 id="encoder">Encoder</h2>
-<p>Encoder consists of multiple layers. Each layer consists of two
-elements, 1) self-attention and 2) feedforward network</p>
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Algorithm 2: Encoder Layer</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">input: encoder input <span class="math inline">\(x\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1   <span class="math inline">\(x = x +
-\text{pos_encoding}(x)\)</span>      # if needed</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">2   For <span class="math inline">\(k = 1,
-2, \dots, h\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">3   <span class="math inline">\(\quad x =
-LN(x + \text{self_attention}(query=x, key=x, value=x)))\)</span>      #
-if needed</td>
-</tr>
-</tbody>
-</table>
-<h2 id="decoder">Decoder</h2>
-<p>Decoder consists of multiple layers. Each layer consists of three
-elements, 1) self-attention, 2) cross-attention and 3) feed forward
-network</p>
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Algorithm 3: Decoder block</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">input: decoder input <span class="math inline">\(x\)</span>, encoder output <span class="math inline">\(memory\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1   <span class="math inline">\(x = x +
-\text{pos_encoding}(x)\)</span>      # if needed</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">2   <span class="math inline">\(x = LN(x +
-\text{MultiheadAttention}(query=x, key=x, value=x)))\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">3   <span class="math inline">\(x = LN(x +
-\text{MultiheadAttention}(query=x, key=memory,
-value=memory))\)</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">4   <span class="math inline">\(x = LN(x +
-FFN(x))\)</span></td>
 </tr>
 </tbody>
 </table>
