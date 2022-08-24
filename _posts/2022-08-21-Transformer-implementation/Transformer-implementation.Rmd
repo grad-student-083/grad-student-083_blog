@@ -1,5 +1,5 @@
 ---
-title: "Deconstructed transformer implementation"
+title: "Transformer implementation deconstructed"
 header-includes:
   - \usepackage{float}
   - \floatplacement{figure}{!htb}
@@ -30,56 +30,127 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introduction
+Few symbols: 
+
+  | symbol | tensor shape | description |
+  | -----  | ----- | ------- |
+  | $B$ | - | batch size | 
+  | $l_z$ | - | context/source sequence length | 
+  | $l_x$ | - | primary/target sequence length | 
+  | $d_\text{model}$ | - | input dimension |
+  | $d_k$ | - | dimension of query/key embedding | 
+  | $d_v$ | - | dimension of value embedding | 
+  | $B$ | - | batch size | 
+  | $h$ | - | number of heads | 
+  | $LN$ | - | layer norm | 
+  | $FFN$ | - | feed forward network | 
+  | $\mathbf{Z}$ | $(B, l_z, d_\text{model})$ | context/source sequence | 
+  | $\mathbf{X}$ | $(B, l_x, d_\text{model})$ | primary/target sequence | 
+  | $\mathbf{M}_{zz}$ | $(l_z, l_z)$ | source mask | 
+  | $\mathbf{M}_{xx}$ | $(l_x, l_x)$ | target mask |
+  | $\mathbf{M}_{zx}$ | $(l_z, l_x)$ | memory mask |
+
 ## Formal algorithm 
+### Encoder-decoder transformer
 | Algorithm 1: Encoder Decoder Transformer|
 | :---      |
-| input: input $x$ |
-| 1  For $l = 1, 2, \dots, L_{enc}$|
-| 2  $\quad  x \leftarrow \text{EncoderLayer}(x)$|
-| 3  For $l = 1, 2, \dots, L_{dec}$|
-| 4  $\quad  x \leftarrow \text{DecoderLayer}(x)$|
+| input: $\mathbf{Z} \in \mathbb{R}^{l_z \times d_\text{model}}$,  $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model} }$, vector representations of context and primary sequence, $L_{enc}$, $L_{dec}$, number of encoder and decoder layers, EncoderLayer class, DecoderLayer class, source_mask, target_mask, memory_mask|
+| output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
+| 1  For $i = 1, 2, \dots, L_{enc}$|
+| 2  $\quad  \mathbf{Z} \leftarrow \text{EncoderLayer}(\mathbf{Z}, \mathbf{M}_z)$ |
+| 3  $\text{memory} = \mathbf{Z}$|
+| 4  For $j = 1, 2, \dots, L_{dec}$|
+| 5  $\quad  \mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \text{memory}, \mathbf{M}_x: Optional, \mathbf{M}_{zx}: Optional)$|
 
+### Encoder transformer (BERT)
+| Algorithm 2: Encoder Transformer|
+| :---      |
+| input: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model} }$, vector representations of primary sequence, $L_{enc}$, number of encoder layers, EncoderLayer class, $\mathbf{M}_{xx}$, target mask|
+| output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
+| 1  For $i = 1, 2, \dots, L_{enc}$|
+| 2  $\quad  \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X}, \mathbf{M}_x \equiv 1)$ |
+
+### Decoder transformer (GPT)
+| Algorithm 2: Decoder Transformer|
+| :---      |
+| input: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model} }$, vector representations of primary sequence, $L_{enc}$, number of encoder layers, EncoderLayer class, $\mathbf{M}_{xx}$, target mask|
+| output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
+| 1  For $i = 1, 2, \dots, L_{dec}$|
+| 2  $\quad  \mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \mathbf{M}_x[t, t'] = [[t\leq t']])$ |
+
+
+
+### Training procedure 
+| Algorithm 4: Training Transformer|
+| :------------------ |
+| $\text{input: }$ |
+| 1  $\text{for } i = 1, 2, \dots, N_\text{epochs}$|
+| 2  $\quad \text{for } (\mathbf{Z}, \mathbf{X}, \text{target})$ in train_dataloader|
+| 3  $\quad \quad  output \leftarrow \text{EDTransformer}(\mathbf{Z}, \mathbf{X})$|
+| 4  $\quad \quad \mathcal{L}(\mathbf{\theta}) = \text{loss_func}(\text{output, target})$|
+| 5  $\quad \quad \theta \leftarrow \theta - \eta \cdot \nabla\mathcal{L}(\theta)$|
+| 6  $\text{return } \mathbf{\theta}$|
 
 
 ## Attention 
 
-
-### Scaled dot product attention
-$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
-Shapes of $Q, K, V$ matrices: 
-
-  | symbol | description |
-  | -----  | ----- |
-  | $N$ | batch size | 
-  | $L$ | target sequence length | 
-  | $S$ | source sequence length | 
-  | $d_k$ | dimension of query/key embedding | 
-  | $d_v$ | dimension of value embedding | 
-
-  
-  | matrix | shape |
-  | -----  | ----- |
-  | query, $Q$ | $(N, L, d_k)$ | 
-  | key, $K$ | $(N, S, d_k)$ | 
-  | value, $V$ | $(N, S, d_v)$ | 
-
-### Self attention and cross-attention
-
 ### Multihead attention
+The original $Q, K, V$ matrices are projected into $h$ smaller matrices of using parameter matrices $W_i^Q, W_i^K, W_i^V$. Then attention is calculated for all these smaller matrices and concatened again to calculate attention for the full size input. 
 
-> **_NOTE:_**  model dimension must be divisible by the number of heads, meaning in python $$ d_\text{model} \  \% \ h == 0 $$
+> **_NOTE:_**  model dimension must be divisible by the number of heads
+
+> **_Code:_**  $$\text{multi_attn} = \text{MultiheadAttention}(Q, K, V)$$
+
+  | argument | tensor shape |
+  | ------ | -------- |
+  | query $Q$ | $(B, l_x, d_\text{model})$ |
+  | key, $K$ | $(B, l_z, d_\text{model})$ |
+  | value, $V$ | $(B, l_x, d_\text{model})$ |
+  | $\text{multi_attn}$ | $(B, l_x, d_\text{out})$ |
+
+
 
 Multihead attention: 
-$$\text{MultiHead}(Q, K, V) = [\text{head}_1, \dots, \text{head}_h]W^O$$
+$$\text{MultiHead}(Q, K, V) = [\text{head}_1; \dots; \text{head}_h]W^O$$
 where $$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
 
-  | Projection weight matrix | dimension |
+  | Projection weight | dimension |
   | -----  | ----- |
-  | query projection, $W^Q$ | $\mathbb{R}^{d_\text{model}\times d_k}$ | 
-  | key projection, $W^K$ |$\mathbb{R}^{d_\text{model}\times d_k}$ | 
-  | value projection, $W^V$ | $\mathbb{R}^{d_\text{model}\times d_v}$ |
-  | output projection, $W^V$ | $\mathbb{R}^{hd_v\times d_\text{out}}$ |
+  | query projection feed forward NN, $W^Q$ | $\mathbb{R}^{d_\text{model}\times d_k}$ | 
+  | key projection  feed forward NN, $W^K$ |$\mathbb{R}^{d_\text{model}\times d_k}$ | 
+  | value projection  feed forward NN, $W^V$ | $\mathbb{R}^{d_\text{model}\times d_v}$ |
+  | output projection  feed forward NN, $W^O$ | $\mathbb{R}^{hd_v\times d_\text{out}}$ |
   
+### Scaled dot product attention
+$$W_i^Q: Q \rightarrow q$$
+$$W_i^K: K \rightarrow k$$
+$$W_i^V: V \rightarrow v$$
+
+
+
+$$\text{Attention}(q, k, v) = \text{softmax}\left(\frac{qk^T}{\sqrt{d_k}}\right)v$$
+
+> **_Code:_**  $$ \text{attention, attention_weights} = \text{_scaled_dot_product_attention}(q, k, v) $$
+
+Shape of the input and output to this function are the following: 
+
+  | argument | tensor shape |
+  | ------ | -------- |
+  | parallel sub-queries, $q$ | $(B, h, L, d_k)$ |
+  | parallel sub-keys, $k$ | $(B, h, S, d_k)$ |
+  | parallel sub-values, $v$ | $(B, h, S, d_v)$ |
+  | $\text{attention}$ | $(B, h, L, d_v)$ |
+  | $\text{attention_weights}$ | $(B, h, L, S)$ |
+
+### Self attention and cross-attention
+Depending on how we create $Q, K, V$ we can define two types of attention mechanism. 
+
+  1. self-attention: input, $X$ is used to represent all three matrices, so $Q = X, K = X, V = X$ 
+  2. cross-attention: input, $X$ is used to represent the query matrix but output from another encoder is used to represent key and value matrices, so $Q = X, K = memory, V = memory$ 
+
+### Mask
+
+$$\text{Mask}[t_z, t_x] = \begin{cases} 1 \quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_z \leq t_x]]  \quad \text{for unidirectional attention} \end{cases}$$
 
 ## Encoder
 Encoder consists of multiple layers. Each layer consists of two elements, 1) self-attention and 2) feedforward network
@@ -91,8 +162,6 @@ Encoder consists of multiple layers. Each layer consists of two elements, 1) sel
 |2 \ \ For $k = 1, 2, \dots, h$ |
 |3 \ \ $\quad x = LN(x + \text{self_attention}(query=x, key=x, value=x)))$ \ \ \ \ \ # if needed|
 
-### self-attention block
-### Feed forward block
 ## Decoder
 Decoder consists of multiple layers. Each layer consists of three elements, 1) self-attention, 2) cross-attention and 3) feed forward network
 
@@ -100,8 +169,8 @@ Decoder consists of multiple layers. Each layer consists of three elements, 1) s
 | :---      |
 | input: decoder input $x$, encoder output $memory$ |
 | 1 \ \ $x = x + \text{pos_encoding}(x)$ \ \ \ \ \ # if needed|
-| 2 \ \ $x = LN(x + \text{self_attention}(query=x, key=x, value=x)))$ |
-| 3 \ \ $x = LN(x + \text{cross_attention}(query=x, key=memory, value=memory))$ |
+| 2 \ \ $x = LN(x + \text{MultiheadAttention}(query=x, key=x, value=x)))$ |
+| 3 \ \ $x = LN(x + \text{MultiheadAttention}(query=x, key=memory, value=memory))$ |
 | 4 \ \ $x = LN(x + FFN(x))$ |
 
 ## Few remarks 
