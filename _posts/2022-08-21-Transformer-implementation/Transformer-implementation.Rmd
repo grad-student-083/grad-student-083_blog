@@ -78,8 +78,32 @@ where, $$\mathbf{x}_i \in \mathbb{R}^{1\times d_\text{model}}, \ \ \ \ \ i = 1, 
 The goal is to learn a representation of the target sequence, $\mathbf{X}$, that utilizes multi-head attention to capture important correlation within the sequence. Finally, people use these representations for various downstream tasks i.e. machine translation [cite], next word prediction [cite], computer vision [cite], reinforcement learning [cite] etc. 
 
 ### Mask
+Mask allows the transformer to decide which part of the output should the model see at each timestep. 
 
-$$\text{Mask}[t_z, t_x] = \begin{cases} 1 \quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_z \leq t_x]]  \quad \text{for unidirectional attention} \end{cases}$$
+$$\mathbf{M}_{\mathbf{x}\mathbf{z}} = \begin{bmatrix} \text{Mask}[\mathbf{x}_0, \mathbf{z}_0] & \text{Mask}[\mathbf{x}_0, \mathbf{z}_1]&  \text{Mask}[\mathbf{x}_0, \mathbf{z}_2] & \dots & \text{Mask}[\mathbf{x}_0, \mathbf{z}_{l_z-1}] & \text{Mask}[\mathbf{x}_0, \mathbf{z}_{l_z}]  \\ 
+\text{Mask}[\mathbf{x}_1, \mathbf{z}_0] & \text{Mask}[\mathbf{x}_1, \mathbf{z}_1]&  \text{Mask}[\mathbf{x}_1, \mathbf{z}_2] & \dots & \text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z-1}] & \text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z}] \\
+\vdots & \vdots&  \vdots & \dots & \vdots & \vdots \\ 
+\text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_0] & \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_1]&  \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_2] & \dots & \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z-1}] & \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z}]
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}$$
+
+For example, if we want the model to see the whole sequence to calculate attention while training,then we do not need to do any masking. This model deploys **bidirectional** attention. The whole sequence should be available at the same time. For a single $i$-th sequence, the mask would look like this
+$$\mathbf{M}_{\mathbf{x}\mathbf{z}} = \begin{bmatrix} 1& 1&  1 & \dots & 1 & 1  \\ 
+1& 1&  1 & \dots & 1 & 1  \\ 
+\vdots & \vdots&  \vdots & \dots & \vdots & \vdots \\ 
+1& 1&  1 & \dots & 1 & 1
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}$$
+
+Similarly, for auto-regressive models, we want the model to calculate attention based on unseen outputs until that timestep. Hence, the mask would be 
+$$\mathbf{M}_{\mathbf{x}\mathbf{z}} = \begin{bmatrix} 1& 0&  0 & \dots & 0 & 0  \\ 
+1& 1&  0 & \dots & 0 & 0  \\ 
+\vdots & \vdots&  \vdots & \dots & \vdots & \vdots \\ 
+1& 1&  1 & \dots & 1 & 1
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}$$
+
+
+In summary, if the length of each sequence at timestep $t$ is $t_x$ and $t_z$ respectively, then we can express each mask as the following, 
+
+$$\text{Mask}[t_x, t_z] = \begin{cases} 1 \quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_x \geq t_z]]  \quad \text{for unidirectional attention} \end{cases}$$
 
 
 ## Formal algorithm 
@@ -168,7 +192,7 @@ $$\mathbf{S} \leftarrow [\mathbf{S}^1, \mathbf{S}^2, \dots, \mathbf{S}^h]$$
 > **_Implementation note:_**  For efficiency, we can implement the heads simultaneously by reshapin the tensors, no need to concat later either
 
 Finally, the attention values would be the following, 
-$$\mathbf{Y} = \mathbf{S}\mathbf{W}^O$$
+$$\mathbf{W}^O: \mathbf{S} \rightarrow \mathbf{Y}$$
 Shape of the input and output tensors would be the follwoing 
 
 | tensor | shape|
@@ -186,14 +210,27 @@ Depending on how we create $Q, K, V$ we can define two types of attention mechan
   $$\begin{matrix} \mathbf{Q} = \mathbf{X} \\ \mathbf{K} = \text{memory} \\ \mathbf{V} = \text{memory} \end{matrix}$$
 
 
+| Algorithm 2: Multihead attention|
+| :---      |
+| input: $\mathbf{q} \in \mathbb{R}^{l_x \times d_k}, \mathbf{k} \in \mathbb{R}^{l_z\times d_k}, \mathbf{v} \in \mathbb{R}^{l_z\times d_v}, \mathbf{M}_{xz} \in \{0, 1\}^{l_x\times l_z}: \text{Optional}$|
+|1 $\mathbf{S} \leftarrow \mathbf{q}\mathbf{k}^T$|
+|2 $\mathbf{S} \leftarrow \text{softmax}\left(\frac{\mathbf{S}}{d_k}\right)$|
+|3 $\mathbf{S} \leftarrow \mathbf{S}\mathbf{v}$|
+|4 $\mathbf{Y} \leftarrow \mathbf{W}^O \mathbf{S}$|
+
+
+
+
+
 ## Encoder
 Each encoder layer consists of two elements, 1) self-attention and 2) feedforward network (FFN)
 
 | Algorithm 2: Encoder Layer|
 | :---      |
 | input: encoder input $\mathbf{Z}$, $\text{class MultiheadAttention}$  |
-|1 \ \ For $k = 1, 2, \dots, h$ |
-|2 \ \ $\quad \mathbf{Z} = LN(\mathbf{Z} + \text{MultiheadAttention}(query=\mathbf{Z}, key=\mathbf{Z}, value=\mathbf{Z})))$ |
+|1 $\text{for } k = 1, 2, \dots, h$ |
+|2 $\quad \mathbf{Z} \leftarrow \mathbf{Z} + \text{MultiheadAttention}(query=\mathbf{Z}, key=\mathbf{Z}, value=\mathbf{Z}, \mathbf{M}_{zz}))$ |
+|3 $\quad \mathbf{Z} \leftarrow LN(\mathbf{Z})$|
 
 > **_Implementation note:_**  As we are implementing the heads simultaneously, the loop is not really needed.
 
@@ -207,6 +244,14 @@ Each decoder layer consists of three elements, 1) self-attention, 2) cross-atten
 | 3 \ \ $\mathbf{X} = LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X}, key=memory, value=memory))$ |
 | 4 \ \ $\mathbf{X} = LN(\mathbf{X} + FFN(\mathbf{X}))$ |
 
+| Algorithm 2: Multihead attention|
+| :---      |
+| input: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model} }$, vector representations of primary sequence, $L_{enc}$, number of encoder layers, EncoderLayer class, $\mathbf{M}_{xx}$, target mask|
+| output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
+| 1  For $i = 1, 2, \dots, L_{enc}$|
+| 2  $\quad  \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X}, \mathbf{M}_{xx}\equiv 1)$ |
+
+
 
 ## BERT and GPT
 ### Encoder transformer (BERT)
@@ -216,7 +261,7 @@ Now, we can define the BERT model in a very straightforward fashion.
 | :---      |
 | input: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model} }$, vector representations of primary sequence, $L_{enc}$, number of encoder layers, EncoderLayer class, $\mathbf{M}_{xx}$, target mask|
 | output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
-| 1  For $i = 1, 2, \dots, L_{enc}$|
+| 1  $\text{for } i = 1, 2, \dots, L_{enc}$|
 | 2  $\quad  \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X}, \mathbf{M}_{xx}\equiv 1)$ |
 
 Similarly, the GPT model can be presented as the following pseudocode. 

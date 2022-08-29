@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #20794d; } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,17 +74,18 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
-code span.sc { color: #20794d; } /* SpecialChar */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
 code span.st { color: #20794d; } /* String */
 code span.va { color: #111111; } /* Variable */
 code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
+
 
   <!--radix_placeholder_meta_tags-->
   <title>Transformer implementation deconstructed</title>
@@ -429,10 +431,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
-  }
-
-  .figure img {
-    width: 100%;
   }
 
   .figure .caption {
@@ -1264,7 +1262,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
         window.tippy(this, {
           allowHTML: true,
           content: refHtml,
@@ -1275,6 +1282,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1374,6 +1406,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -1396,7 +1430,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -2652,9 +2686,52 @@ people use these representations for various downstream tasks
 i.e. machine translation [cite], next word prediction [cite], computer
 vision [cite], reinforcement learning [cite] etc.</p>
 <h3 id="mask">Mask</h3>
-<p><span class="math display">\[\text{Mask}[t_z, t_x] = \begin{cases} 1
-\quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_z
-\leq t_x]]  \quad \text{for unidirectional attention}
+<p>Mask allows the transformer to decide which part of the output should
+the model see at each timestep.</p>
+<p><span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}} =
+\begin{bmatrix} \text{Mask}[\mathbf{x}_0, \mathbf{z}_0] &amp;
+\text{Mask}[\mathbf{x}_0, \mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_0,
+\mathbf{z}_2] &amp; \dots &amp; \text{Mask}[\mathbf{x}_0,
+\mathbf{z}_{l_z-1}] &amp; \text{Mask}[\mathbf{x}_0,
+\mathbf{z}_{l_z}]  \\
+\text{Mask}[\mathbf{x}_1, \mathbf{z}_0] &amp; \text{Mask}[\mathbf{x}_1,
+\mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_1, \mathbf{z}_2] &amp; \dots
+&amp; \text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z-1}] &amp;
+\text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z}] \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
+\\
+\text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_0] &amp;
+\text{Mask}[\mathbf{x}_{l_x},
+\mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_2] &amp;
+\dots &amp; \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z-1}] &amp;
+\text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z}]
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+<p>For example, if we want the model to see the whole sequence to
+calculate attention while training,then we do not need to do any
+masking. This model deploys <strong>bidirectional</strong> attention.
+The whole sequence should be available at the same time. For a single
+<span class="math inline">\(i\)</span>-th sequence, the mask would look
+like this <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
+= \begin{bmatrix} 1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1  \\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1  \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
+\\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+<p>Similarly, for auto-regressive models, we want the model to calculate
+attention based on unseen outputs until that timestep. Hence, the mask
+would be <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
+= \begin{bmatrix} 1&amp; 0&amp;  0 &amp; \dots &amp; 0 &amp; 0  \\
+1&amp; 1&amp;  0 &amp; \dots &amp; 0 &amp; 0  \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
+\\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+<p>In summary, if the length of each sequence at timestep <span class="math inline">\(t\)</span> is <span class="math inline">\(t_x\)</span> and <span class="math inline">\(t_z\)</span> respectively, then we can express
+each mask as the following,</p>
+<p><span class="math display">\[\text{Mask}[t_x, t_z] = \begin{cases} 1
+\quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_x
+\geq t_z]]  \quad \text{for unidirectional attention}
 \end{cases}\]</span></p>
 <h2 id="formal-algorithm">Formal algorithm</h2>
 <p>First we provide a pseudoode of the encoder-decoder transformer
@@ -2904,8 +2981,9 @@ we concatenate all the attention score to get the original dimension,
 implement the heads simultaneously by reshapin the tensors, no need to
 concat later either</p>
 </blockquote>
-<p>Finally, the attention values would be the following, <span class="math display">\[\mathbf{Y} = \mathbf{S}\mathbf{W}^O\]</span>
-Shape of the input and output tensors would be the follwoing</p>
+<p>Finally, the attention values would be the following, <span class="math display">\[\mathbf{W}^O: \mathbf{S} \rightarrow
+\mathbf{Y}\]</span> Shape of the input and output tensors would be the
+follwoing</p>
 <table>
 <thead>
 <tr class="header">
@@ -2940,6 +3018,41 @@ and value, so<br />
 \mathbf{K} = \text{memory} \\ \mathbf{V} = \text{memory}
 \end{matrix}\]</span></li>
 </ol>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 2: Multihead attention</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">input: <span class="math inline">\(\mathbf{q} \in \mathbb{R}^{l_x \times d_k},
+\mathbf{k} \in \mathbb{R}^{l_z\times d_k}, \mathbf{v} \in
+\mathbb{R}^{l_z\times d_v}, \mathbf{M}_{xz} \in \{0, 1\}^{l_x\times
+l_z}: \text{Optional}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1 <span class="math inline">\(\mathbf{S}
+\leftarrow \mathbf{q}\mathbf{k}^T\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2 <span class="math inline">\(\mathbf{S}
+\leftarrow
+\text{softmax}\left(\frac{\mathbf{S}}{d_k}\right)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3 <span class="math inline">\(\mathbf{S}
+\leftarrow \mathbf{S}\mathbf{v}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4 <span class="math inline">\(\mathbf{Y}
+\leftarrow \mathbf{W}^O \mathbf{S}\)</span></td>
+</tr>
+</tbody>
+</table>
 <h2 id="encoder">Encoder</h2>
 <p>Each encoder layer consists of two elements, 1) self-attention and 2)
 feedforward network (FFN)</p>
@@ -2957,13 +3070,18 @@ feedforward network (FFN)</p>
 <td style="text-align: left;">input: encoder input <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\text{class MultiheadAttention}\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">1   For <span class="math inline">\(k = 1,
-2, \dots, h\)</span></td>
+<td style="text-align: left;">1 <span class="math inline">\(\text{for }
+k = 1, 2, \dots, h\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">2   <span class="math inline">\(\quad
-\mathbf{Z} = LN(\mathbf{Z} + \text{MultiheadAttention}(query=\mathbf{Z},
-key=\mathbf{Z}, value=\mathbf{Z})))\)</span></td>
+<td style="text-align: left;">2 <span class="math inline">\(\quad
+\mathbf{Z} \leftarrow \mathbf{Z} +
+\text{MultiheadAttention}(query=\mathbf{Z}, key=\mathbf{Z},
+value=\mathbf{Z}, \mathbf{M}_{zz}))\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3 <span class="math inline">\(\quad
+\mathbf{Z} \leftarrow LN(\mathbf{Z})\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3003,6 +3121,38 @@ key=memory, value=memory))\)</span></td>
 </tr>
 </tbody>
 </table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm 2: Multihead attention</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">input: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
+d_\text{model} }\)</span>, vector representations of primary sequence,
+<span class="math inline">\(L_{enc}\)</span>, number of encoder layers,
+EncoderLayer class, <span class="math inline">\(\mathbf{M}_{xx}\)</span>, target mask</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">output: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
+d_\text{model}}\)</span>, representation of primary sequence with
+multi-head attention which can be used for downstream applications</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1 For <span class="math inline">\(i = 1,
+2, \dots, L_{enc}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2 <span class="math inline">\(\quad
+\mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X},
+\mathbf{M}_{xx}\equiv 1)\)</span></td>
+</tr>
+</tbody>
+</table>
 <h2 id="bert-and-gpt">BERT and GPT</h2>
 <h3 id="encoder-transformer-bert">Encoder transformer (BERT)</h3>
 <p>Now, we can define the BERT model in a very straightforward
@@ -3029,8 +3179,8 @@ d_\text{model}}\)</span>, representation of primary sequence with
 multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">1 For <span class="math inline">\(i = 1,
-2, \dots, L_{enc}\)</span></td>
+<td style="text-align: left;">1 <span class="math inline">\(\text{for }
+i = 1, 2, \dots, L_{enc}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
