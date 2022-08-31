@@ -2747,7 +2747,7 @@ like this <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
 1&amp; 1&amp;  1 &amp; \dots &amp; 1  \\
 \vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots \\
 1&amp; 1&amp;  1 &amp; \dots &amp; 1
-\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_z}\]</span></p>
 <p>Similarly, for auto-regressive models, we want the model to calculate
 attention based on unseen outputs until that timestep. Hence, the mask
 would be <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
@@ -2755,7 +2755,7 @@ would be <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
 1&amp; 1&amp;  0 &amp; \dots &amp; 0  \\
 \vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots \\
 1&amp; 1&amp;  1 &amp; \dots &amp; 1
-\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_z}\]</span></p>
 <p>In summary, if the length of each sequence at timestep <span class="math inline">\(t\)</span> is <span class="math inline">\(t_x\)</span> and <span class="math inline">\(t_z\)</span> respectively, then we can express
 each mask as the following,</p>
 <p><span class="math display">\[\text{Mask}[t_x, t_z] = \begin{cases} 1
@@ -2850,7 +2850,7 @@ Finally we perform gradient descent to minimize the loss.</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 4: Training Transformer</th>
+<th style="text-align: left;">Algorithm 2: Training Transformer</th>
 </tr>
 </thead>
 <tbody>
@@ -3067,7 +3067,7 @@ and value, so<br />
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 2: Multihead attention</th>
+<th style="text-align: left;">Algorithm 3: Multihead attention</th>
 </tr>
 </thead>
 <tbody>
@@ -3113,7 +3113,7 @@ feedforward network (FFN)</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 2: Encoder Layer</th>
+<th style="text-align: left;">Algorithm 4: Encoder Layer</th>
 </tr>
 </thead>
 <tbody>
@@ -3151,7 +3151,7 @@ cross-attention and 3) feed forward network</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 3: Decoder layer</th>
+<th style="text-align: left;">Algorithm 5: Decoder layer</th>
 </tr>
 </thead>
 <tbody>
@@ -3176,39 +3176,6 @@ key=memory, value=memory))\)</span></td>
 </tr>
 </tbody>
 </table>
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Algorithm 2: Multihead attention</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">input: <span class="math inline">\(\quad
-\mathbf{X}: \text{vector representations of primary sequence}, \\  \quad
-L_{enc}: \text{number of encoder layers}, \\  \quad \text{class
-EncoderLayer}, \\  \quad \mathbf{M}_{\mathbf{xx}}: \text{target
-mask}\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">output: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model}}\)</span>, representation of primary sequence with
-multi-head attention which can be used for downstream applications</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">1 For <span class="math inline">\(i = 1,
-2, \dots, L_{enc}\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X},
-\mathbf{M}_{\mathbf{xx}}\equiv 1)\)</span></td>
-</tr>
-</tbody>
-</table>
 <h2 id="bert-and-gpt">BERT and GPT</h2>
 <h3 id="encoder-transformer-bert">Encoder transformer (BERT)</h3>
 <p>Now, we can define the BERT model in a very straightforward
@@ -3219,7 +3186,7 @@ fashion.</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 2: Encoder Transformer</th>
+<th style="text-align: left;">Algorithm 6: Encoder Transformer</th>
 </tr>
 </thead>
 <tbody>
@@ -3255,7 +3222,7 @@ pseudocode.</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Algorithm 2: Decoder Transformer</th>
+<th style="text-align: left;">Algorithm 7: Decoder Transformer</th>
 </tr>
 </thead>
 <tbody>

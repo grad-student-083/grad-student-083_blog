@@ -91,14 +91,14 @@ $$\mathbf{M}_{\mathbf{x}\mathbf{z}} = \begin{bmatrix} 1& 1&  1 & \dots & 1  \\
 1& 1&  1 & \dots & 1  \\ 
 \vdots & \vdots&  \vdots & \dots & \vdots \\ 
 1& 1&  1 & \dots & 1
-\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}$$
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_z}$$
 
 Similarly, for auto-regressive models, we want the model to calculate attention based on unseen outputs until that timestep. Hence, the mask would be 
 $$\mathbf{M}_{\mathbf{x}\mathbf{z}} = \begin{bmatrix} 1& 0&  0 & \dots & 0  \\ 
 1& 1&  0 & \dots & 0  \\ 
 \vdots & \vdots&  \vdots & \dots & \vdots \\ 
 1& 1&  1 & \dots & 1
-\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}$$
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_z}$$
 
 
 In summary, if the length of each sequence at timestep $t$ is $t_x$ and $t_z$ respectively, then we can express each mask as the following, 
@@ -131,7 +131,7 @@ First we provide a pseudoode of the encoder-decoder transformer algorithm. The f
 The training procedure is fairly simple and basically same as other neural network models. To make a broaded sense, I am not including any NLP specific output from the model. So, the output from the model is what we are interested in. We will also need to supply the target so that loss can be caluculated using the output and the target values. Finally we perform gradient descent to minimize the loss. 
 
 ### Training procedure 
-| Algorithm 4: Training Transformer|
+| Algorithm 2: Training Transformer|
 | :------------------ |
 | $\text{input: } \text{class EDTransformer, class loss_func, learning rate $\eta$}$ |
 | 1  $\text{for } i = 1, 2, \dots, N_\text{epochs}$|
@@ -215,7 +215,7 @@ Depending on how we create $Q, K, V$ we can define two types of attention mechan
   $$\begin{matrix} \mathbf{Q} = \mathbf{X} \\ \mathbf{K} = \text{memory} \\ \mathbf{V} = \text{memory} \end{matrix}$$
 
 
-| Algorithm 2: Multihead attention|
+| Algorithm 3: Multihead attention|
 | :---      |
 | input: $\mathbf{q} \in \mathbb{R}^{l_x \times d_k}, \mathbf{k} \in \mathbb{R}^{l_z\times d_k}, \mathbf{v} \in \mathbb{R}^{l_z\times d_v}, \mathbf{M}_{\mathbf{xz}} \in \{0, 1\}^{l_x\times l_z}: \text{Optional}$|
 |1 $\mathbf{S} \leftarrow \mathbf{q}\mathbf{k}^T$|
@@ -231,7 +231,7 @@ Depending on how we create $Q, K, V$ we can define two types of attention mechan
 ## Encoder
 Each encoder layer consists of two elements, 1) self-attention and 2) feedforward network (FFN)
 
-| Algorithm 2: Encoder Layer|
+| Algorithm 4: Encoder Layer|
 | :---      |
 | input: $\quad \mathbf{Z}: \text{encoder input}, \\ 
            \quad \text{class MultiheadAttention}$|
@@ -244,7 +244,7 @@ Each encoder layer consists of two elements, 1) self-attention and 2) feedforwar
 ## Decoder
 Each decoder layer consists of three elements, 1) self-attention, 2) cross-attention and 3) feed forward network
 
-| Algorithm 3: Decoder layer|
+| Algorithm 5: Decoder layer|
 | :---      |
 | input: $\quad \mathbf{X}: \text{decoder input}, \\ 
           \quad \text{memory}: \text{encoder output},\\  
@@ -253,23 +253,11 @@ Each decoder layer consists of three elements, 1) self-attention, 2) cross-atten
 | 3 \ \ $\mathbf{X} = LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X}, key=memory, value=memory))$ |
 | 4 \ \ $\mathbf{X} = LN(\mathbf{X} + FFN(\mathbf{X}))$ |
 
-| Algorithm 2: Multihead attention|
-| :---      |
-| input: $\quad \mathbf{X}: \text{vector representations of primary sequence}, \\ 
-          \quad L_{enc}: \text{number of encoder layers}, \\ 
-          \quad \text{class EncoderLayer}, \\ 
-          \quad \mathbf{M}_{\mathbf{xx}}: \text{target mask}$|
-| output: $\mathbf{X} \in \mathbb{R}^{l_x \times d_\text{model}}$, representation of primary sequence with multi-head attention which can be used for downstream applications|
-| 1  For $i = 1, 2, \dots, L_{enc}$|
-| 2  $\quad  \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X}, \mathbf{M}_{\mathbf{xx}}\equiv 1)$ |
-
-
-
 ## BERT and GPT
 ### Encoder transformer (BERT)
 Now, we can define the BERT model in a very straightforward fashion. 
 
-| Algorithm 2: Encoder Transformer|
+| Algorithm 6: Encoder Transformer|
 | :---      |
 | input: $\quad \mathbf{X}, \text{ vector representations of primary sequence}, \\  
         \quad L_{enc}, \text{ number of encoder layers, EncoderLayer class}, \\ 
@@ -282,7 +270,7 @@ Now, we can define the BERT model in a very straightforward fashion.
 Similarly, the GPT model can be presented as the following pseudocode. 
 
 ### Decoder transformer (GPT)
-| Algorithm 2: Decoder Transformer|
+| Algorithm 7: Decoder Transformer|
 | :---      |
 | input: $\quad \mathbf{X}, \text{vector representations of primary sequence}, \\
     \quad L_{dec}, \text{number of decoder layers}, \\  
