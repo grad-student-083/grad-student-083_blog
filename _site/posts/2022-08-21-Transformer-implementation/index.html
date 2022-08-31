@@ -86,6 +86,27 @@ code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
+<style>
+  div.csl-bib-body { }
+  div.csl-entry {
+    clear: both;
+    }
+  .hanging div.csl-entry {
+    margin-left:2em;
+    text-indent:-2em;
+  }
+  div.csl-left-margin {
+    min-width:2em;
+    float:left;
+  }
+  div.csl-right-inline {
+    margin-left:2em;
+    padding-left:1em;
+  }
+  div.csl-indent {
+    margin-left: 2em;
+  }
+</style>
 
   <!--radix_placeholder_meta_tags-->
 <title>The Graduate Student Perspective: Transformer implementation deconstructed</title>
@@ -112,6 +133,13 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <!--/radix_placeholder_meta_tags-->
   
+  <meta name="citation_reference" content="citation_title=Attention is all you need;citation_publication_date=2017;citation_volume=30;citation_author=Ashish Vaswani;citation_author=Noam Shazeer;citation_author=Niki Parmar;citation_author=Jakob Uszkoreit;citation_author=Llion Jones;citation_author=Aidan N Gomez;citation_author=Łukasz Kaiser;citation_author=Illia Polosukhin" />
+  <meta name="citation_reference" content="citation_title=Bert: Pre-training of deep bidirectional transformers for language understanding;citation_publication_date=2018;citation_author=Jacob Devlin;citation_author=Ming-Wei Chang;citation_author=Kenton Lee;citation_author=Kristina Toutanova" />
+  <meta name="citation_reference" content="citation_title=Improving language understanding by generative pre-training;citation_publication_date=2018;citation_publisher=OpenAI;citation_author=Alec Radford;citation_author=Karthik Narasimhan;citation_author=Tim Salimans;citation_author=Ilya Sutskever;citation_author=Improving language understanding by generative pre-training" />
+  <meta name="citation_reference" content="citation_title=Formal algorithms for transformers;citation_publication_date=2022;citation_author=Mary Phuong;citation_author=Marcus Hutter" />
+  <meta name="citation_reference" content="citation_title=Xlnet: Generalized autoregressive pretraining for language understanding;citation_publication_date=2019;citation_volume=32;citation_author=Zhilin Yang;citation_author=Zihang Dai;citation_author=Yiming Yang;citation_author=Jaime Carbonell;citation_author=Russ R Salakhutdinov;citation_author=Quoc V Le" />
+  <meta name="citation_reference" content="citation_title=An image is worth 16x16 words: Transformers for image recognition at scale;citation_publication_date=2020;citation_author=Alexey Dosovitskiy;citation_author=Lucas Beyer;citation_author=Alexander Kolesnikov;citation_author=Dirk Weissenborn;citation_author=Xiaohua Zhai;citation_author=Thomas Unterthiner;citation_author=Mostafa Dehghani;citation_author=Matthias Minderer;citation_author=Georg Heigold;citation_author=Sylvain Gelly;citation_author=An image is worth 16x16 words: Transformers for image recognition at scale" />
+  <meta name="citation_reference" content="citation_title=Decision transformer: Reinforcement learning via sequence modeling;citation_publication_date=2021;citation_volume=34;citation_author=Lili Chen;citation_author=Kevin Lu;citation_author=Aravind Rajeswaran;citation_author=Kimin Lee;citation_author=Aditya Grover;citation_author=Misha Laskin;citation_author=Pieter Abbeel;citation_author=Aravind Srinivas;citation_author=Igor Mordatch" />
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
@@ -3160,7 +3188,6 @@ algorithm</a></li>
 <li><a href="#encoder" id="toc-encoder">Encoder</a></li>
 <li><a href="#decoder" id="toc-decoder">Decoder</a></li>
 <li><a href="#bert-and-gpt" id="toc-bert-and-gpt">BERT and GPT</a></li>
-<li><a href="#few-remarks" id="toc-few-remarks">Few remarks</a></li>
 </ul>
 </nav>
 </div>
@@ -3240,18 +3267,18 @@ this <a href="https://github.com/ferdous-alam/DeconstructedML/tree/master/Decons
 <td>primary/target sequence</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\mathbf{M}_{zz}\)</span></td>
-<td><span class="math inline">\((l_z, l_z)\)</span></td>
+<td><span class="math inline">\(\mathbf{M}_{\mathbf{zz}}\)</span></td>
+<td><span class="math inline">\((B, l_z, l_z)\)</span></td>
 <td>source mask</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\mathbf{M}_{xx}\)</span></td>
-<td><span class="math inline">\((l_x, l_x)\)</span></td>
+<td><span class="math inline">\(\mathbf{M}_{\mathbf{xx}}\)</span></td>
+<td><span class="math inline">\((B, l_x, l_x)\)</span></td>
 <td>target mask</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\mathbf{M}_{zx}\)</span></td>
-<td><span class="math inline">\((l_z, l_x)\)</span></td>
+<td><span class="math inline">\(\mathbf{M}_{\mathbf{xz}}\)</span></td>
+<td><span class="math inline">\((l_z, l_z)\)</span></td>
 <td>memory mask</td>
 </tr>
 <tr class="even">
@@ -3267,13 +3294,17 @@ this <a href="https://github.com/ferdous-alam/DeconstructedML/tree/master/Decons
 </tbody>
 </table>
 <p>We start with the originally proposed encoder-decoder (ED)
-transformer [cite]. If we only use the encoder of the transformer, then
-it is similar to the BERT [cite] model and if we only use the decoder of
-the transformer then it is similar to the GPT model [cite]. For clarity,
-we consider a batched source sequence data <span class="math inline">\(\mathbf{Z}\)</span> which consists of <span class="math inline">\(B\)</span> sequences. Each sequence is of length
-<span class="math inline">\(l_z\)</span>. This means that the sequence
-consists of <span class="math inline">\(l_z\)</span> number of tokens or
-vector representation of some input.</p>
+transformer <span class="citation" data-cites="vaswani2017attention">(<a href="#ref-vaswani2017attention" role="doc-biblioref">Vaswani et al.
+2017</a>)</span>. If we only use the encoder of the transformer, then it
+is similar to the BERT <span class="citation" data-cites="devlin2018bert">(<a href="#ref-devlin2018bert" role="doc-biblioref">Devlin et al. 2018</a>)</span> model and if we only
+use the decoder of the transformer then it is similar to the GPT model
+<span class="citation" data-cites="radford2018improving">(<a href="#ref-radford2018improving" role="doc-biblioref">Radford et al.
+2018</a>)</span>. For clarity, we consider a batched source sequence
+data <span class="math inline">\(\mathbf{Z}\)</span> which consists of
+<span class="math inline">\(B\)</span> sequences. Each sequence is of
+length <span class="math inline">\(l_z\)</span>. This means that the
+sequence consists of <span class="math inline">\(l_z\)</span> number of
+tokens or vector representation of some input.</p>
 <p><span class="math display">\[ \mathbf{Z} = \begin{bmatrix}
 \mathbf{z}^1_1 &amp; \mathbf{z}^1_2 &amp; \dots &amp; \mathbf{z}^1_{l_z}
 \\
@@ -3303,49 +3334,47 @@ l_x\]</span></p>
 <p>The goal is to learn a representation of the target sequence, <span class="math inline">\(\mathbf{X}\)</span>, that utilizes multi-head
 attention to capture important correlation within the sequence. Finally,
 people use these representations for various downstream tasks
-i.e. machine translation [cite], next word prediction [cite], computer
-vision [cite], reinforcement learning [cite] etc.</p>
+i.e. machine translation <span class="citation" data-cites="vaswani2017attention">(<a href="#ref-vaswani2017attention" role="doc-biblioref">Vaswani et al. 2017</a>)</span>, next word
+prediction <span class="citation" data-cites="yang2019xlnet">(<a href="#ref-yang2019xlnet" role="doc-biblioref">Yang et al.
+2019</a>)</span>, computer vision <span class="citation" data-cites="dosovitskiy2020image">(<a href="#ref-dosovitskiy2020image" role="doc-biblioref">Dosovitskiy et al. 2020</a>)</span>, reinforcement
+learning <span class="citation" data-cites="chen2021decision">(<a href="#ref-chen2021decision" role="doc-biblioref">Chen et al.
+2021</a>)</span> etc. A wonderful paper from DeepMind describes the
+formal algorithms for transformers <span class="citation" data-cites="phuong2022formal">(<a href="#ref-phuong2022formal" role="doc-biblioref">Phuong and Hutter 2022</a>)</span> very neatly.</p>
 <h3 id="mask">Mask</h3>
 <p>Mask allows the transformer to decide which part of the output should
 the model see at each timestep.</p>
 <p><span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}} =
 \begin{bmatrix} \text{Mask}[\mathbf{x}_0, \mathbf{z}_0] &amp;
 \text{Mask}[\mathbf{x}_0, \mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_0,
-\mathbf{z}_2] &amp; \dots &amp; \text{Mask}[\mathbf{x}_0,
-\mathbf{z}_{l_z-1}] &amp; \text{Mask}[\mathbf{x}_0,
+\mathbf{z}_2] &amp; \dots &amp;\text{Mask}[\mathbf{x}_0,
 \mathbf{z}_{l_z}]  \\
 \text{Mask}[\mathbf{x}_1, \mathbf{z}_0] &amp; \text{Mask}[\mathbf{x}_1,
 \mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_1, \mathbf{z}_2] &amp; \dots
-&amp; \text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z-1}] &amp;
-\text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z}] \\
-\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
-\\
+&amp; \text{Mask}[\mathbf{x}_1, \mathbf{z}_{l_z}] \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots \\
 \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_0] &amp;
 \text{Mask}[\mathbf{x}_{l_x},
 \mathbf{z}_1]&amp;  \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_2] &amp;
-\dots &amp; \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z-1}] &amp;
-\text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z}]
-\end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
+\dots  &amp; \text{Mask}[\mathbf{x}_{l_x}, \mathbf{z}_{l_z}]
+\end{bmatrix} \in \mathbb{R}^{l_x \times l_z}\]</span></p>
 <p>For example, if we want the model to see the whole sequence to
 calculate attention while training,then we do not need to do any
 masking. This model deploys <strong>bidirectional</strong> attention.
 The whole sequence should be available at the same time. For a single
 <span class="math inline">\(i\)</span>-th sequence, the mask would look
 like this <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
-= \begin{bmatrix} 1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1  \\
-1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1  \\
-\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
-\\
-1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1
+= \begin{bmatrix} 1&amp; 1&amp;  1 &amp; \dots &amp; 1  \\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1  \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots \\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1
 \end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
 <p>Similarly, for auto-regressive models, we want the model to calculate
 attention based on unseen outputs until that timestep. Hence, the mask
 would be <span class="math display">\[\mathbf{M}_{\mathbf{x}\mathbf{z}}
-= \begin{bmatrix} 1&amp; 0&amp;  0 &amp; \dots &amp; 0 &amp; 0  \\
-1&amp; 1&amp;  0 &amp; \dots &amp; 0 &amp; 0  \\
-\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots &amp; \vdots
-\\
-1&amp; 1&amp;  1 &amp; \dots &amp; 1 &amp; 1
+= \begin{bmatrix} 1&amp; 0&amp;  0 &amp; \dots &amp; 0  \\
+1&amp; 1&amp;  0 &amp; \dots &amp; 0  \\
+\vdots &amp; \vdots&amp;  \vdots &amp; \dots &amp; \vdots \\
+1&amp; 1&amp;  1 &amp; \dots &amp; 1
 \end{bmatrix} \in \mathbb{R}^{l_x \times l_x}\]</span></p>
 <p>In summary, if the length of each sequence at timestep <span class="math inline">\(t\)</span> is <span class="math inline">\(t_x\)</span> and <span class="math inline">\(t_z\)</span> respectively, then we can express
 each mask as the following,</p>
@@ -3353,14 +3382,28 @@ each mask as the following,</p>
 \quad \quad \quad \quad  \text{for bidirectional attention} \\ [[t_x
 \geq t_z]]  \quad \text{for unidirectional attention}
 \end{cases}\]</span></p>
+<p>For conveniece, we introduce two additional terms:</p>
+<ol type="1">
+<li>self-masks, <span class="math inline">\(\mathbf{M}_{\mathbf{x}\mathbf{x}}\)</span> or
+<span class="math inline">\(\mathbf{M}_{\mathbf{z}\mathbf{z}}\)</span>:
+When we want to mask the same sequence against itself, for example we
+would use this sort of masking in the encoder part</li>
+<li>cross-masks, <span class="math inline">\(\mathbf{M}_{\mathbf{x}\mathbf{z}}\)</span>: When
+we want to mask a target sequence against a source sequence, for example
+we would use this sort of masking in the decoder part</li>
+</ol>
 <h2 id="formal-algorithm">Formal algorithm</h2>
 <p>First we provide a pseudoode of the encoder-decoder transformer
 algorithm. The following pseudocode is a simplified version of the
-formal algorithm presented in this paper [cite]. Initially I wanted to
-include the original pseudocode from the paper. But it seems like a
-handling a lot of notations while thinking of implementation. So, I
-added some trivial abstraction on top of that so the implementation
-becomes more convenient.</p>
+formal algorithm presented in this paper <span class="citation" data-cites="phuong2022formal">(<a href="#ref-phuong2022formal" role="doc-biblioref">Phuong and Hutter 2022</a>)</span>. Initially I
+wanted to include the original pseudocode from the paper. But it seems
+like handling a lot of notations while thinking of the implementation.
+So, I added some trivial abstraction on top of that so the
+implementation becomes more convenient. Also, each matrix in that paper
+is transposed which makes the batched implementation little bit
+difficult to understand. So, I made some required modifications. This
+may reduce the technical correctness of the pseudocode, but I think that
+can be thought of as a simplification for implementation purpose.</p>
 <h3 id="encoder-decoder-transformer">Encoder-decoder transformer</h3>
 <table>
 <colgroup>
@@ -3392,8 +3435,8 @@ multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{Z} \leftarrow \text{EncoderLayer}(\mathbf{Z}, \mathbf{M}_{zz}:
-Optional)\)</span></td>
+\mathbf{Z} \leftarrow \text{EncoderLayer}(\mathbf{Z},
+\mathbf{M}_{\mathbf{zz}}: Optional)\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">3 <span class="math inline">\(\text{memory} = \mathbf{Z}\)</span></td>
@@ -3405,8 +3448,8 @@ Optional)\)</span></td>
 <tr class="odd">
 <td style="text-align: left;">5 <span class="math inline">\(\quad
 \mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \text{memory},
-\mathbf{M}_{xx}: Optional, \mathbf{M}_{zz}: Optional, \mathbf{M}_{zx}:
-Optional)\)</span></td>
+\mathbf{M}_{\mathbf{xx}}: Optional, \mathbf{M}_{\mathbf{zz}}: Optional,
+\mathbf{M}_{\mathbf{xz}}: Optional)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3449,8 +3492,8 @@ data}\)</span></td>
 <tr class="even">
 <td style="text-align: left;">3 <span class="math inline">\(\quad \quad
 output \leftarrow \text{EDTransformer}(\mathbf{Z}, \mathbf{X},
-\mathbf{M}_{xx}: Optional, \mathbf{M}_{zz}: Optional, \mathbf{M}_{zx}:
-Optional)\)</span></td>
+\mathbf{M}_{\mathbf{xx}}: Optional, \mathbf{M}_{\mathbf{zz}}: Optional,
+\mathbf{M}_{\mathbf{xz}}: Optional)\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">4 <span class="math inline">\(\quad \quad
@@ -3651,8 +3694,8 @@ and value, so<br />
 <tr class="odd">
 <td style="text-align: left;">input: <span class="math inline">\(\mathbf{q} \in \mathbb{R}^{l_x \times d_k},
 \mathbf{k} \in \mathbb{R}^{l_z\times d_k}, \mathbf{v} \in
-\mathbb{R}^{l_z\times d_v}, \mathbf{M}_{xz} \in \{0, 1\}^{l_x\times
-l_z}: \text{Optional}\)</span></td>
+\mathbb{R}^{l_z\times d_v}, \mathbf{M}_{\mathbf{xz}} \in \{0,
+1\}^{l_x\times l_z}: \text{Optional}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1 <span class="math inline">\(\mathbf{S}
@@ -3673,6 +3716,14 @@ l_z}: \text{Optional}\)</span></td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong><em>Implementation note:</em></strong> For masking purpose,
+we can replace each masked element in <span class="math inline">\(\mathbf{M}_\mathbf{xz}\)</span> by <span class="math inline">\(-\infty\)</span> while making the non-masked
+elements as <span class="math inline">\(0\)</span>s. In this way the
+softmax at line <span class="math inline">\(2\)</span> makes the masked
+element <span class="math inline">\(0\)</span> while only keeping the
+non-masked values</p>
+</blockquote>
 <h2 id="encoder">Encoder</h2>
 <p>Each encoder layer consists of two elements, 1) self-attention and 2)
 feedforward network (FFN)</p>
@@ -3687,7 +3738,9 @@ feedforward network (FFN)</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">input: encoder input <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\text{class MultiheadAttention}\)</span></td>
+<td style="text-align: left;">input: <span class="math inline">\(\quad
+\mathbf{Z}: \text{encoder input}, \\  \quad \text{class
+MultiheadAttention}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1 <span class="math inline">\(\text{for }
@@ -3697,7 +3750,7 @@ k = 1, 2, \dots, h\)</span></td>
 <td style="text-align: left;">2 <span class="math inline">\(\quad
 \mathbf{Z} \leftarrow \mathbf{Z} +
 \text{MultiheadAttention}(query=\mathbf{Z}, key=\mathbf{Z},
-value=\mathbf{Z}, \mathbf{M}_{zz}))\)</span></td>
+value=\mathbf{Z}, \mathbf{M}_{\mathbf{zz}}))\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">3 <span class="math inline">\(\quad
@@ -3723,7 +3776,9 @@ cross-attention and 3) feed forward network</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">input: decoder input <span class="math inline">\(\mathbf{X}\)</span>, encoder output <span class="math inline">\(\text{memory}\)</span>, <span class="math inline">\(\text{class MultiheadAttention}\)</span></td>
+<td style="text-align: left;">input: <span class="math inline">\(\quad
+\mathbf{X}: \text{decoder input}, \\  \quad \text{memory}: \text{encoder
+output},\\  \quad \text{class MultiheadAttention}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2   <span class="math inline">\(\mathbf{X}
@@ -3752,10 +3807,11 @@ key=memory, value=memory))\)</span></td>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">input: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model} }\)</span>, vector representations of primary sequence,
-<span class="math inline">\(L_{enc}\)</span>, number of encoder layers,
-EncoderLayer class, <span class="math inline">\(\mathbf{M}_{xx}\)</span>, target mask</td>
+<td style="text-align: left;">input: <span class="math inline">\(\quad
+\mathbf{X}: \text{vector representations of primary sequence}, \\  \quad
+L_{enc}: \text{number of encoder layers}, \\  \quad \text{class
+EncoderLayer}, \\  \quad \mathbf{M}_{\mathbf{xx}}: \text{target
+mask}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">output: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
@@ -3769,7 +3825,7 @@ multi-head attention which can be used for downstream applications</td>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
 \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X},
-\mathbf{M}_{xx}\equiv 1)\)</span></td>
+\mathbf{M}_{\mathbf{xx}}\equiv 1)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3788,15 +3844,16 @@ fashion.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">input: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model} }\)</span>, vector representations of primary sequence,
-<span class="math inline">\(L_{enc}\)</span>, number of encoder layers,
-EncoderLayer class, <span class="math inline">\(\mathbf{M}_{xx}\)</span>, target mask</td>
+<td style="text-align: left;">input: <span class="math inline">\(\quad
+\mathbf{X}, \text{ vector representations of primary sequence},
+\\  \quad L_{enc}, \text{ number of encoder layers, EncoderLayer class},
+\\  \quad \mathbf{M}_{\mathbf{xx}}, \text{ target mask}\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">output: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model}}\)</span>, representation of primary sequence with
-multi-head attention which can be used for downstream applications</td>
+<td style="text-align: left;">output: <span class="math inline">\(\quad
+\mathbf{X}, \text{ representation of primary sequence with multi-head
+attention} \\  \text{ which can be used for downstream
+applications}\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">1 <span class="math inline">\(\text{for }
@@ -3805,7 +3862,7 @@ i = 1, 2, \dots, L_{enc}\)</span></td>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
 \mathbf{X} \leftarrow \text{EncoderLayer}(\mathbf{X},
-\mathbf{M}_{xx}\equiv 1)\)</span></td>
+\mathbf{M}_{\mathbf{xx}}\equiv 1)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -3823,15 +3880,17 @@ pseudocode.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">input: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model} }\)</span>, vector representations of primary sequence,
-<span class="math inline">\(L_{enc}\)</span>, number of encoder layers,
-EncoderLayer class, <span class="math inline">\(\mathbf{M}_{xx}\)</span>, target mask</td>
+<td style="text-align: left;">input: <span class="math inline">\(\quad
+\mathbf{X}, \text{vector representations of primary sequence}, \\  \quad
+L_{dec}, \text{number of decoder layers}, \\  \quad \text{class}
+\text{  DecoderLayer}, \\  \quad \mathbf{M}_{\mathbf{xx}}, \text{target
+mask}\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">output: <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{l_x \times
-d_\text{model}}\)</span>, representation of primary sequence with
-multi-head attention which can be used for downstream applications</td>
+<td style="text-align: left;">output: <span class="math inline">\(\quad
+\mathbf{X}, \text{ representation of primary sequence with multi-head
+attention} \\ \text{which can be used for downstream
+applications}\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">1 For <span class="math inline">\(i = 1,
@@ -3839,13 +3898,54 @@ multi-head attention which can be used for downstream applications</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2 <span class="math inline">\(\quad
-\mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X}, \mathbf{M}_{xx}[t,
-t&#39;] = [[t\leq t&#39;]])\)</span></td>
+\mathbf{X} \leftarrow \text{DecoderLayer}(\mathbf{X},
+\mathbf{M}_{\mathbf{xx}}[t, t&#39;] = [[t&#39;\geq t]])\)</span></td>
 </tr>
 </tbody>
 </table>
-<h2 id="few-remarks">Few remarks</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-chen2021decision" class="csl-entry" role="doc-biblioentry">
+Chen, Lili, Kevin Lu, Aravind Rajeswaran, Kimin Lee, Aditya Grover,
+Misha Laskin, Pieter Abbeel, Aravind Srinivas, and Igor Mordatch. 2021.
+<span>“Decision Transformer: Reinforcement Learning via Sequence
+Modeling.”</span> <em>Advances in Neural Information Processing
+Systems</em> 34: 15084–97.
+</div>
+<div id="ref-devlin2018bert" class="csl-entry" role="doc-biblioentry">
+Devlin, Jacob, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2018.
+<span>“Bert: Pre-Training of Deep Bidirectional Transformers for
+Language Understanding.”</span> <em>arXiv Preprint
+arXiv:1810.04805</em>.
+</div>
+<div id="ref-dosovitskiy2020image" class="csl-entry" role="doc-biblioentry">
+Dosovitskiy, Alexey, Lucas Beyer, Alexander Kolesnikov, Dirk
+Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, et al.
+2020. <span>“An Image Is Worth 16x16 Words: Transformers for Image
+Recognition at Scale.”</span> <em>arXiv Preprint arXiv:2010.11929</em>.
+</div>
+<div id="ref-phuong2022formal" class="csl-entry" role="doc-biblioentry">
+Phuong, Mary, and Marcus Hutter. 2022. <span>“Formal Algorithms for
+Transformers.”</span> <em>arXiv Preprint arXiv:2207.09238</em>.
+</div>
+<div id="ref-radford2018improving" class="csl-entry" role="doc-biblioentry">
+Radford, Alec, Karthik Narasimhan, Tim Salimans, Ilya Sutskever, et al.
+2018. <span>“Improving Language Understanding by Generative
+Pre-Training.”</span>
+</div>
+<div id="ref-vaswani2017attention" class="csl-entry" role="doc-biblioentry">
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion
+Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017.
+<span>“Attention Is All You Need.”</span> <em>Advances in Neural
+Information Processing Systems</em> 30.
+</div>
+<div id="ref-yang2019xlnet" class="csl-entry" role="doc-biblioentry">
+Yang, Zhilin, Zihang Dai, Yiming Yang, Jaime Carbonell, Russ R
+Salakhutdinov, and Quoc V Le. 2019. <span>“Xlnet: Generalized
+Autoregressive Pretraining for Language Understanding.”</span>
+<em>Advances in Neural Information Processing Systems</em> 32.
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
