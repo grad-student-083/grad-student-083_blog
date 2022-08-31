@@ -3740,7 +3740,8 @@ feedforward network (FFN)</p>
 <tr class="odd">
 <td style="text-align: left;">input: <span class="math inline">\(\quad
 \mathbf{Z}: \text{encoder input}, \\  \quad \text{class
-MultiheadAttention}\)</span></td>
+MultiheadAttention}, \\  \quad \mathbf{M}_{\mathbf{zz}}:
+\text{self-attention of encoder input}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1 <span class="math inline">\(\text{for }
@@ -3778,17 +3779,21 @@ cross-attention and 3) feed forward network</p>
 <tr class="odd">
 <td style="text-align: left;">input: <span class="math inline">\(\quad
 \mathbf{X}: \text{decoder input}, \\  \quad \text{memory}: \text{encoder
-output},\\  \quad \text{class MultiheadAttention}\)</span></td>
+output},\\  \quad \text{class MultiheadAttention} \\  \quad
+\mathbf{M}_{\mathbf{xx}}: \text{self-attention of decoder
+input},\\  \quad \mathbf{M}_{\mathbf{xz}}: \text{cross attention of
+decoder input and encoder output}\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2   <span class="math inline">\(\mathbf{X}
 = LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X},
-key=\mathbf{X}, value=\mathbf{X})))\)</span></td>
+key=\mathbf{X}, value=\mathbf{X},
+\mathbf{M}_{\mathbf{xx}})))\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">3   <span class="math inline">\(\mathbf{X}
 = LN(\mathbf{X} + \text{MultiheadAttention}(query=\mathbf{X},
-key=memory, value=memory))\)</span></td>
+key=memory, value=memory, \mathbf{M}_{\mathbf{xz}}))\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">4   <span class="math inline">\(\mathbf{X}
