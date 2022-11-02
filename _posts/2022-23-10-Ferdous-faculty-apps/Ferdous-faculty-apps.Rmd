@@ -80,3 +80,6 @@ knitr::opts_chunk$set(echo = FALSE)
 | 1 | MIT (ME)| AI for engineering Design | Nov 1/open | Faez Ahmed | [Link](https://careers.peopleclick.com/careerscp/client_mit/external/en-us/gateway/viewFromLink.html?jobPostId=25495&localeCode=en-us) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1FyW2MN88-WeY2KObS72ceq218kxU7rIa?usp=sharing)|
 | 2 | UT Austin (ECE)| RL, robotics | Nov 1 | Amy Zhang/Peter Stone | [Link](https://ml.utexas.edu/postdoctoral-positions) | draft| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1qRaopZu_5XeYXzz8b1Sz_thqd4yMkEwW?usp=sharing)|
 | 3 | PNNL | RL, Sci ML | Nov 8 | - | [Link](https://careers.pnnl.gov/jobs/5695?lang=en-us) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+| 4 | CMU robotics | robotics, Deep learning | Not specified | - | [Link](https://cmu.wd5.myworkdayjobs.com/en-US/CMU/job/Pittsburgh-PA/Postdoctoral-Fellow--Robotics-Institute_2018951?source=HigherEdJobs) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+
+
