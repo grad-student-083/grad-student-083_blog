@@ -1,0 +1,100 @@
+---
+title: "Ferdous Faculty Applications: 2023"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{!htb}
+  - \usepackage{algorithm}
+  - \usepackage{algpseudocode}
+  
+description: |
+  School specific application materials with deadlines.
+  
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+  params:
+  include:
+    label: "Include extra material?"
+    value: ""
+    input: select
+    choices: [True, False]
+
+    
+    
+date: 10-23-2022
+author:
+  - name: Md Ferdous Alam
+    url: https://ferdous-alam.github.io
+    affiliation: PhD candidate, Hoelzle Research Lab, MAE, The Ohio State University
+    affiliation_url: https://mae.osu.edu
+
+bibliography: biblio.bib
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+> **_NOTE:_** Most updated generic application materials (CV, research statement, teaching statement, diversity statement) can be found [here](https://drive.google.com/drive/folders/15JN0V_O5szYkRlhoUra7-2kI_ejop3Yr?usp=sharing). School specific materials can be found below. 
+
+
+| | University| Topic | Deadline | Remarks | Link | Status | Materials|
+|:-----:|:----------:|:-------:|:----------:|:---------:|:--------:|:------:|:-------:|
+| 1 | <span style="color:gray">NC State (ISE) </span> | <span style="color:gray">next gen Mfg, robotics </span> | <span style="color:gray"> Nov 1/open</span> | - | [<span style="color:gray">Link</span>](https://connect.informs.org/HigherLogic/System/DownloadDocumentFile.ashx?DocumentFileKey=b32aac71-68cb-4d6c-856d-b19d859163b4) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/15Tkb801gHWj-lMJAb617GvdT2I4FGlf-?usp=sharing)|
+| 2 | <span style="color:gray">NC State (ME) </span>| <span style="color:gray">next gen Mfg, robotics</span> |  <span style="color:gray">Nov 1/open</span> | - | [<span style="color:gray">Link</span>](https://jobs.ncsu.edu/postings/171488) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1Ek6pE02-_RZpbN_BfD19MHcsIUicZrvi?usp=sharing)|
+| 3| <span style="color:gray">UT Austin (ME)</span>| <span style="color:gray">Mfg, Control, robotics </span>|  <span style="color:gray">Nov 1</span> | - | [<span style="color:gray">Link</span>](https://www.me.utexas.edu/people/faculty-jobs) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1qRaopZu_5XeYXzz8b1Sz_thqd4yMkEwW?usp=sharing)|
+| 4 | <span style="color:gray">Carnegie Mellon (ME)</span> | <span style="color:gray">Control, robotics, AI/ML </span>|  <span style="color:gray">Nov 1</span> | - | [<span style="color:gray">Link</span>](https://www.meche.engineering.cmu.edu/employment.html) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1v110-X2JHrm_WB03S0RMQnLZUkRRT7Cu?usp=sharing)|
+| 5 |  <span style="color:gray">Arizona State (ME)</span>|  <span style="color:gray">Control, Autonomous, robotics </span>|  <span style="color:gray">Nov 5 </span>| - |  [<span style="color:gray">Link</span>](https://apply.interfolio.com/113817) </span>|  <span style="color:blue"> submitted</span>| [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1OAWBKNQpPMdOdFl6bT6mVGRic-7laGNn?usp=sharing)|
+| 6 |  <span style="color:gray">SUNNY Binghamton (SSIE)</span>|  <span style="color:gray">Autonomous systems </span>|  <span style="color:gray">rolling </span>| - | [ <span style="color:gray">Link</span>]() | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1elDxTa6AVuseV0fpLrDMGTo8_sGJ3T4u?usp=sharing)|
+| 7 |  <span style="color:gray">Northwestern (ME) </span> |  <span style="color:gray">Mfg, data analytics, Mfg optiization </span>|  <span style="color:gray">Nov 15 </span>| - | [ <span style="color:gray">Link</span>](https://www.mccormick.northwestern.edu/mechanical/careers/) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1Vg1CeXyTtgQadFfa7q2TZWNf_fL0q4y6?usp=sharing)|
+| 8 | <span style="color:gray">Wichita State (ME) </span>| <span style="color:gray">AI, robotics, Mfg  </span>| <span style="color:gray">Nov 15 </span>| - | [<span style="color:gray">Link</span>](https://jobs.wichita.edu/postings/27298) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1_Btn-3rR7pWipCHMeKlqT_eaMaKDfZK9?usp=sharing)|
+| 9 | <span style="color:gray">Ottawa (ME) CAN</span>| <span style="color:gray">AI/ML, autonomous, robotics </span>| <span style="color:gray">Nov 15</span>| - | [<span style="color:gray">Link</span>](https://uottawa.njoyn.com/CL3/xweb/Xweb.asp?tbtoken=ZltZRh5QRlU4Ygd2MSMnYVpUeWRdcUxYelBWTikEf2xFWUEdXEYdcxMHdkFcGVtXTnViXzpQ&chk=ZVpaShI%3D&CLID=57566&page=jobdetails&JobID=J1022-0837&lang=1) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>]()|
+| 10 | <span style="color:gray">Notre Dame (ME)</span>| <span style="color:gray">Robotics, Mfg, Data Sci </span>| <span style="color:gray">Nov 4/Dec 1 </span>| - |[<span style="color:gray">Link</span>](https://apply.interfolio.com/112134) | <span style="color:blue"> submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1tBV59Xem08EvDfIdGcsN2ptBDeicOJW2?usp=sharing)|
+| 11 | <span style="color:gray">Oregon State (ME) </span>| <span style="color:gray">Mfg, Control, AI, robotics, mechatronics | <span style="color:gray">Dec 1 | - | [<span style="color:gray">Link](https://jobs.oregonstate.edu/postings/125513) | <span style="color:red">rejected</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1eyT9BXElHdIpBf23ZGsbVXeBDl7mfuq4?usp=sharing)|
+| 12 | <span style="color:gray">UC Merced (ME) </span>| <span style="color:gray">AI/ML, Mfg </span>| <span style="color:gray">Dec 1 </span>| - | [<span style="color:gray">Link</span>](https://aprecruit.ucmerced.edu/JPf01419) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>]()|
+| 13 | <span style="color:gray">Santa Clara (ME)</span>| <span style="color:gray">Design, Mfg, Robotics, Control </span>| <span style="color:gray">Dec 2 </span>| - | [<span style="color:gray">Link</span>](https://wd1.myworkdaysite.com/en-US/recruiting/scu/scu/job/Santa-Clara-CA/Assistant-Professor-of-Mechanical-Engineering_R2846) | <span style="color:green">Phone interview</span> | [<img src="complete.png" width="30"/>]()|
+| 14 | <span style="color:gray">UC Irvine (ME)</span>| <span style="color:gray">Autonomous systems, Desin and Mfg, Robotics </span>| <span style="color:gray">Dec 11 </span>| - | [<span style="color:gray">Link</span>](https://recruit.ap.uci.edu/JPF07842) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/11qbFXKhAaPnEyVMP-5AYTgcqZjpMov4d?usp=sharing)|
+| 15 | <span style="color:gray">Uni of Maryland (ME) </span>| <span style="color:gray">AI/ML, manufacturing </span>| <span style="color:gray">Dec 15 </span>| - | [<span style="color:gray">Link</span>](https://ejobs.umd.edu/postings/100313) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>]()|
+| 16 | <span style="color:gray">Rensselaer (ME) </span>| <span style="color:gray">AI/ML, robotics, Mfg </span>| <span style="color:gray">rolling </span>| - | [<span style="color:gray">Link</span>](https://careers.rpi.edu/cw/en-us/job/493546/assistant-or-associate-professor-mechanical-engineering) |  <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>]()|
+| 17 | <span style="color:gray">Rice (ME) </span>| <span style="color:gray">Autonomous systems, Desin and Mfg, Robotics </span>| <span style="color:gray"><span style="color:gray">Dec 31</span> | - | [Link](https://apply.interfolio.com/114276) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1k_tpw4XciVeLLrBWxCnDlhji7mGE6oij?usp=sharing)|
+| 18 | <span style="color:gray">UT Dallas (ME)</span>| <span style="color:gray">Design, Mfg, Automation, robotics</span> | <span style="color:gray">Dec 31 </span>| Justin Koeln | [Link](https://jobs.utdallas.edu/postings/20919) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1oYR1_clPlpMJoq_iF41OmYlnL21qgTvF?usp=sharing)|
+| 19 | <span style="color:gray">Binghampton (ME)</span>| <span style="color:gray">Mfg, AI, autonomy </gray>| <span style="color:gray">Dec 31 </span>| - | [Link](https://binghamton.interviewexchange.com/jobofferdetails.jsp;jsessionid=C26E16D6051D3EE42EE4C2EF78BBA434?JOBID=155524) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>]()|
+| 20 | <span style="color:gray">Uni Dayton (ME) </span>| <span style="color:gray">AI/ML, Design, Mfg </span>| <span style="color:gray">Jan 03</span>| - | [Link](https://employment.udayton.edu/cw/en-us/job/500487/assistant-professor-specializing-in-design-andor-manufacturing-department-of-mechanical-and-aerospace-engineering) |<span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>]()|
+| 21 | <span style="color:gray">New Hapshire (ME) </span>| <span style="color:gray">AI/ML, control/robotics, Mfg </span>| <span style="color:gray">Dec 15 </span>| - | [<span style="color:gray">Link</span>](https://jobs.usnh.edu/postings/52307) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>]()|
+| 22 | <span style="color:gray">Stevens IT (ME) </span>|<span style="color:gray"> AI/ML, Design, robotics, Mfg </span>| <span style="color:gray">rolling </span>| - | [<span style="color:gray">Link</span>](https://stevens.wd5.myworkdayjobs.com/External/job/Hoboken-NJ---Main-Campus/Assistant-Associate-Professor--Mechanical-Engineering_RQ26335) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>]()|
+| 23 | <span style="color:gray">Southern_Illinois_carbondale (ME)</span>| <span style="color:gray">Control, ML, robotics, Mfg</span> | <span style="color:gray">Jan 5 </span>| - | [<span style="color:gray">Link</span>](https://jobs.siu.edu/staff/job-details-staff?jobID=14494&job=assistant-professor-mechanical-engineering) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>]()|
+| 24 | <span style="color:gray">UW Madison (ME)</span>| <span style="color:gray">Autonomous systems, Mfg, Learning</span> | <span style="color:gray">Jan 12</span> | - | [<span style="color:gray">Link</span>](https://jobs.hr.wisc.edu/en-us/job/515799/assistant-professor) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>](https://jobs.hr.wisc.edu/cw/en-us/job/515799/assistant-professor)|
+| 25 | <span style="color:gray">Pitts (ME) </span>| <span style="color:gray">AI/ML, robotics, Mfg  </span>| <span style="color:gray">rolling  </span>| - | [<span style="color:gray">Link </span>](https://lsu.wd1.myworkdayjobs.com/en-US/LSU/job/Assistant-Professors--Tenure-Track----Mechanical-and-Industrial-Engineering_R00074381) | <span style="color:blue">submitted</span>| [<img src="complete.png" width="30"/>]()|
+| 26 | <span style="color:gray">UMass Lowell (ME)</span>| <span style="color:gray">robotics </span>| <span style="color:gray">Jan 15 </span>| - | [<span style="color:gray">Link</span>](https://explorejobs.uml.edu/mob/lowell/en-us/job/516984/tenuretrack-assistant-professor-robotics-mechanical-engineering) | <span style="color:blue">submitted</span>| [<img src="complete" width="30"/>]()|
+| 27 | <span style="color:red">Rutgers (ME) </span>| AI/ML, robotics, Mfg | rolling | - | [Link](https://jobs.rutgers.edu/postings/182123) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 28 | Texas State (ME)| AI/ML, Mfg | Jan 10 | - | [Link](https://jobs.hr.txstate.edu/postings/40240) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 29| University of Cincinnati (ISE) | Mfg, data analytics, Cyber-physical | rolling | - | [Link](https://drive.google.com/drive/folders/1iNd8JOW1k3LrbfLAyUf08beWS0UdULjH?usp=sharing) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1iNd8JOW1k3LrbfLAyUf08beWS0UdULjH?usp=sharing)|
+| 30 | U Alabama (ME) | AI/ML, robotics, Mfg | rolling | - | [Link](https://jobs.rutgers.edu/postings/186225) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 31 | Louisiana State (ME) | AI/ML, robotics, Mfg | rolling | - | [Link](https://lsu.wd1.myworkdayjobs.com/en-US/LSU/job/Assistant-Professors--Tenure-Track----Mechanical-and-Industrial-Engineering_R00074381) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 32 | NJIT (MIE)| AI/ML, design, Mfg, robotics | rolling | - | [Link](https://njit.csod.com/ux/ats/careersite/1/home/requisition/4537?c=njit) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 33 | U Arizona (ME)| robotics/autonomous | Jan 17 | - | [Link](https://arizona.csod.com/ux/ats/careersite/4/home/requisition/12635?c=arizona) | $\sim$| [<img src="loading.png" width="30"/>]()|
+| 34 | UMich (ME) | Control, Mfg |  Jan 31 | - | [Link](https://me.engin.umich.edu/about/positions/faculty/) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+
+
+
+
+
+
+### Ferdous past research and future research plans:
+
+![](future_plans_v1.png "Future research plans")
+
+
+### PostDoc applications:
+
+|  | University| Topic | Deadline | Remarks | Link | Status | Materials|
+|:--------:|:----------:|:-------:|:----------:|:---------:|:--------:|:------:|:-------:|
+| 1 | <span style="color:gray">MIT (ME)</span>| <span style="color:gray">AI for engineering Design</span> | <span style="color:gray">open</span>| <span style="color:gray">Faez Ahmed</span> | [<span style="color:gray">Link</span>](https://careers.peopleclick.com/careerscp/client_mit/external/en-us/gateway/viewFromLink.html?jobPostId=25495&localeCode=en-us) | <span style="color:blue">submitted</span>  | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1FyW2MN88-WeY2KObS72ceq218kxU7rIa?usp=sharing)|
+| 2 | <span style="color:gray">UT Austin (ECE)</span>| <span style="color:gray">RL, robotics </span>| <span style="color:gray">open | <span style="color:gray">Amy Zhang/Peter Stone </span>| [<span style="color:gray">Link</span>](https://ml.utexas.edu/postdoctoral-positions) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1Ck4xTIAB9KGcu-0t8S4Q8HpWUAPJ4Et-?usp=sharing)|
+| 3 | <span style="color:gray">PNNL</span> | <span style="color:gray">RL, Sci ML </span>| <span style="color:gray">Nov 8 </span>| - | [<span style="color:gray">Link</span>](https://careers.pnnl.gov/jobs/5695?lang=en-us) | <span style="color:blue">submitted</span> | [<img src="complete.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+| 4 | Argonne NL | ML, optimal control | open | - | [Link](https://argonne.wd1.myworkdayjobs.com/en-US/Argonne_Careers/job/Lemont-IL-USA/Postdoctoral-Appointee--Optimization-and-Mathematics-for-Digital-Twins_414375) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+| 5 | CMU robotics | robotics, Deep learning | Not specified | - | [Link](https://cmu.wd5.myworkdayjobs.com/en-US/CMU/job/Pittsburgh-PA/Postdoctoral-Fellow--Robotics-Institute_2018951?source=HigherEdJobs) | $\sim$| [<img src="loading.png" width="30"/>](https://drive.google.com/drive/folders/1JRKS5mpGzz_guc45Dyf4IbvrDmo9vBbq?usp=sharing)|
+
+

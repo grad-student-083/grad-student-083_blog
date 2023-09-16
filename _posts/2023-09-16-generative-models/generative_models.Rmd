@@ -1,0 +1,41 @@
+---
+title: "Generative Models"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{!htb}
+  - \usepackage{algorithm}
+  - \usepackage{algpseudocode}
+  
+description: |
+  A simple primer for generative models with toy examples
+  
+output:  
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+
+date: 09-16-2023
+author:
+  - name: Md Ferdous Alam
+    url: https://ferdous-alam.github.io
+    affiliation: Postdoc, MechE, MIT
+    affiliation_url: https://meche.mit.edu/
+
+bibliography: biblio.bib
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+> **_NOTE:_** Code implementation can be found at this [repo]().
+
+## Introduction
+## Variational Autoencoders
+## Flow based models
+## Diffusion models
+
+
+
+
